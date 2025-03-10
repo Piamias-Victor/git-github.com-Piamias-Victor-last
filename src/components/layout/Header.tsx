@@ -1,10 +1,14 @@
 'use client';
 
 import Link from "next/link";
-import { FiMenu, FiUser, FiLogOut } from "react-icons/fi";
-import { useSession, signOut } from "next-auth/react";
+import { FiMenu } from "react-icons/fi";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { DateRangeSelector } from "@/components/shared/DateRangeSelector";
+import { NavLinks } from "./NavLinks";
+import { AuthButtons } from "./AuthButtons";
+import { MobileMenu } from "./MobileMenu";
 
 /**
  * Header Component
@@ -22,42 +26,9 @@ export function Header() {
     return null;
   }
 
-  // Afficher bouton de connexion ou profil selon l'état de la session
-  const AuthButton = () => {
-    if (status === 'loading') {
-      return <div className="h-9 w-24 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>;
-    }
-
-    if (status === 'authenticated') {
-      return (
-        <div className="flex items-center gap-3">
-          <Link 
-            href="/dashboard" 
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors duration-200"
-          >
-            <FiUser size={16} />
-            {session.user?.name}
-          </Link>
-          <button 
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-200"
-          >
-            <FiLogOut className="mr-2" size={16} />
-            Déconnexion
-          </button>
-        </div>
-      );
-    }
-
-    return (
-      <Link 
-        href="/auth/login" 
-        className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-200"
-      >
-        Se connecter
-      </Link>
-    );
-  };
+  // Vérifier si on est sur le dashboard ou une page qui nécessite la sélection de dates
+  const showDateSelector = pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin');
+  const isAuthenticated = status === 'authenticated';
 
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
@@ -66,7 +37,6 @@ export function Header() {
           {/* Logo and brand name */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2">
-              {/* Logo placeholder - replace with actual logo */}
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-600 to-teal-600 flex items-center justify-center text-white font-bold">
                 A
               </div>
@@ -77,39 +47,21 @@ export function Header() {
           </div>
           
           {/* Navigation links - desktop */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {status === 'authenticated' ? (
-              // Menu pour utilisateurs connectés
-              <>
-                <Link href="/dashboard" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                  Tableau de bord
-                </Link>
-                <Link href="/dashboard/analytics" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                  Analyses
-                </Link>
-              </>
-            ) : (
-              // Menu pour visiteurs
-              <>
-                <a href="#features" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                  Fonctionnalités
-                </a>
-                <a href="#about" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                  À propos
-                </a>
-                <a href="#objectives" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                  Objectifs
-                </a>
-                <a href="#contact" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                  Contact
-                </a>
-              </>
-            )}
-          </nav>
+          <NavLinks isAuthenticated={isAuthenticated} />
           
-          {/* Auth button */}
+          {/* Date selector and auth buttons */}
           <div className="flex items-center gap-3">
-            <AuthButton />
+            {/* Sélecteur de dates (uniquement sur les pages de dashboard) */}
+            {showDateSelector && (
+              <div className="hidden md:block">
+                <DateRangeSelector />
+              </div>
+            )}
+            
+            <AuthButtons 
+              status={status} 
+              userName={session?.user?.name} 
+            />
             
             {/* Mobile menu button */}
             <button 
@@ -121,49 +73,12 @@ export function Header() {
           </div>
         </div>
         
-        {/* Mobile menu (simplifié) */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-3 border-t border-gray-200 dark:border-gray-700">
-            <nav className="flex flex-col space-y-3 px-2">
-              {status === 'authenticated' ? (
-                // Menu mobile pour utilisateurs connectés
-                <>
-                  <Link href="/dashboard" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                    Tableau de bord
-                  </Link>
-                  <Link href="/dashboard/analytics" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                    Analyses
-                  </Link>
-                  <button 
-                    onClick={() => signOut({ callbackUrl: '/' })}
-                    className="text-left text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                  >
-                    Déconnexion
-                  </button>
-                </>
-              ) : (
-                // Menu mobile pour visiteurs
-                <>
-                  <a href="#features" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                    Fonctionnalités
-                  </a>
-                  <a href="#about" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                    À propos
-                  </a>
-                  <a href="#objectives" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                    Objectifs
-                  </a>
-                  <a href="#contact" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-                    Contact
-                  </a>
-                  <Link href="/auth/login" className="text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors">
-                    Se connecter
-                  </Link>
-                </>
-              )}
-            </nav>
-          </div>
-        )}
+        {/* Mobile menu */}
+        <MobileMenu 
+          isOpen={mobileMenuOpen}
+          isAuthenticated={isAuthenticated}
+          showDateSelector={showDateSelector}
+        />
       </div>
     </header>
   );

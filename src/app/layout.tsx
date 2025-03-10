@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/providers/AuthProvider";
+import { DateRangeProvider } from "@/providers/DateRangeProvider";
 
 // Load fonts
 const geistSans = Geist({
@@ -38,14 +39,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          {/* Global header */}
-          <Header />
-          
-          {/* Main content */}
-          {children}
+          <DateRangeProvider>
+            {/* Global header */}
+            <Header />
+            
+            {/* Main content */}
+            {children}
 
-          {/* Global footer */}
-          <Footer />
+            {/* Global footer */}
+            <Footer />
+          </DateRangeProvider>
         </AuthProvider>
       </body>
     </html>
