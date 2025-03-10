@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -9,7 +10,8 @@ import { AuthInput } from '@/components/auth/AuthInput';
 import { AuthButton } from '@/components/auth/AuthButton';
 import { AuthFormError } from '@/components/auth/AuthFormError';
 
-export default function RegisterPage() {
+// Composant principal qui sera enveloppé dans Suspense
+function RegisterForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
@@ -146,5 +148,14 @@ export default function RegisterPage() {
         </p>
       </div>
     </AuthCard>
+  );
+}
+
+// Composant page qui utilise Suspense
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Chargement...</div>}>
+      <RegisterForm />
+    </Suspense>
   );
 }

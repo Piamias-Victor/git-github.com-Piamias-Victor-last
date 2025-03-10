@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useContext, useEffect, ReactNode, Suspense } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { getDateRangeFromPreset, formatDateForDisplay } from '@/utils/dateUtils';
 import { PRESET_RANGES } from '@/components/shared/PresetRangeOptions';
@@ -33,11 +33,8 @@ interface DateRangeProviderProps {
   children: ReactNode;
 }
 
-/**
- * Fournisseur pour partager les informations de plage de dates
- * sur l'ensemble de l'application
- */
-export function DateRangeProvider({ children }: DateRangeProviderProps) {
+// Composant interne qui utilise useSearchParams
+function DateRangeProviderContent({ children }: { children: ReactNode }) {
   const [range, setRange] = useState<string>('thisMonth');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
@@ -162,5 +159,19 @@ export function DateRangeProvider({ children }: DateRangeProviderProps) {
     <DateRangeContext.Provider value={{ range, startDate, endDate, displayLabel, setDateRange }}>
       {children}
     </DateRangeContext.Provider>
+  );
+}
+
+/**
+ * Fournisseur pour partager les informations de plage de dates
+ * sur l'ensemble de l'application
+ */
+export function DateRangeProvider({ children }: DateRangeProviderProps) {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Chargement des paramètres de date...</div>}>
+      <DateRangeProviderContent>
+        {children}
+      </DateRangeProviderContent>
+    </Suspense>
   );
 }

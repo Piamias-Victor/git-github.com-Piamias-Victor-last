@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { Suspense } from 'react';
 import { CurrentDateRange } from '@/components/dashboard/CurrentDateRange';
 
 interface DashboardHeaderProps {
@@ -7,12 +9,15 @@ interface DashboardHeaderProps {
   showDateRange?: boolean;
 }
 
-/**
- * DashboardHeader Component
- * 
- * En-tête réutilisable pour les pages du tableau de bord.
- * Peut afficher optionnellement la plage de dates sélectionnée.
- */
+// Séparez la partie qui pourrait utiliser useSearchParams
+function DateRangeWrapper() {
+  return (
+    <Suspense fallback={<div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>}>
+      <CurrentDateRange />
+    </Suspense>
+  );
+}
+
 export function DashboardHeader({ title, subtitle, showDateRange = true }: DashboardHeaderProps) {
   return (
     <div className="mb-8">
@@ -29,9 +34,7 @@ export function DashboardHeader({ title, subtitle, showDateRange = true }: Dashb
         </div>
         
         {/* Affichage de la plage de dates si demandé */}
-        {showDateRange && (
-          <CurrentDateRange />
-        )}
+        {showDateRange && <DateRangeWrapper />}
       </div>
     </div>
   );

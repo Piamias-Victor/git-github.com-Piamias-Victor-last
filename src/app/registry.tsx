@@ -1,7 +1,8 @@
 'use client';
 
 import { FiBarChart, FiPackage, FiPieChart, FiTrendingUp, FiDatabase, 
-         FiAlertTriangle, FiActivity, FiShoppingCart, fiCom } from 'react-icons/fi';
+         FiAlertTriangle, FiActivity, FiShoppingCart, 
+         FiMinimize} from 'react-icons/fi';
 
 /**
  * Registre centralisé des icônes et des mappings pour l'application

@@ -60,7 +60,7 @@ export function Header() {
             
             <AuthButtons 
               status={status} 
-              userName={session?.user?.name} 
+              userName={session?.user?.name || undefined} 
             />
             
             {/* Mobile menu button */}

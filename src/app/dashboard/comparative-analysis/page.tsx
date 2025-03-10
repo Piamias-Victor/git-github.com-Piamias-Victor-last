@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -7,13 +8,8 @@ import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 
-/**
- * Page d'analyse comparative
- * 
- * Cette page permettra de comparer les performances entre différents
- * produits, laboratoires ou périodes.
- */
-export default function ComparativeAnalysisPage() {
+// Composant principal séparé
+function ComparativeAnalysisContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -101,11 +97,20 @@ export default function ComparativeAnalysisPage() {
           {/* Placeholder pour le graphique de comparaison */}
           <div className="mt-6 h-64 bg-gray-50 dark:bg-gray-700/50 rounded-lg flex items-center justify-center">
             <p className="text-center text-gray-500 dark:text-gray-400">
-              Le graphique de comparaison s'affichera ici après la sélection
+              Le graphique de comparaison s&apos;affichera ici après la sélection
             </p>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+// Composant page enveloppé dans Suspense
+export default function ComparativeAnalysisPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Chargement...</div>}>
+      <ComparativeAnalysisContent />
+    </Suspense>
   );
 }

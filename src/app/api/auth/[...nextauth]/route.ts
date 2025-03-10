@@ -14,7 +14,8 @@ const users = [
   }
 ];
 
-export const authOptions: NextAuthOptions = {
+// Définir les options d'authentification
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -68,9 +69,9 @@ export const authOptions: NextAuthOptions = {
     signOut: '/auth/logout',
     error: '/auth/error',
   },
-  // Utilisez un secret fort en production via les variables d'environnement
   secret: process.env.NEXTAUTH_SECRET || 'votre-secret-temporaire-a-changer',
 };
 
+// Créer et exporter le handler avec les méthodes HTTP appropriées
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

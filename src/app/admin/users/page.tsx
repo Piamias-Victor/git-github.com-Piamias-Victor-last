@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { FiPlus, FiEdit2, FiTrash2, FiUser, FiMail, FiLock, FiBuilding } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiUser, FiMail, FiLock, FiBox } from 'react-icons/fi';
 import { AuthInput } from '@/components/auth/AuthInput';
 import { AuthButton } from '@/components/auth/AuthButton';
 import { AuthFormError } from '@/components/auth/AuthFormError';
@@ -106,7 +106,7 @@ function CreateUserForm() {
             id="pharmacyName"
             name="pharmacyName"
             type="text"
-            icon={<FiBuilding className="h-5 w-5 text-gray-400" />}
+            icon={<FiBox className="h-5 w-5 text-gray-400" />}
             placeholder="Nom de la pharmacie"
             value={formData.pharmacyName}
             onChange={handleChange}

@@ -1,17 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { FiCalendar, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { useSearchParams } from 'next/navigation';
 import { useDateRange } from '@/providers/DateRangeProvider';
 import { PresetRangeOptions } from './PresetRangeOptions';
 import { CustomDateRange } from './CustomDateRange';
 
-/**
- * Composant sélecteur de plage de dates global
- * Permet de filtrer les données par période sur l'ensemble du site
- */
-export function DateRangeSelector() {
+// Séparation du contenu qui utilise useSearchParams
+function DateRangeSelectorContent() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRange, setSelectedRange] = useState('thisMonth');
   const [startDate, setStartDate] = useState('');
@@ -105,5 +102,14 @@ export function DateRangeSelector() {
         </div>
       )}
     </div>
+  );
+}
+
+// Composant principal enveloppé dans Suspense
+export function DateRangeSelector() {
+  return (
+    <Suspense fallback={<div className="h-9 w-32 bg-gray-200 dark:bg-gray-700 animate-pulse rounded-md"></div>}>
+      <DateRangeSelectorContent />
+    </Suspense>
   );
 }
