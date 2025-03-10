@@ -6,11 +6,11 @@ import type { NextAuthOptions } from 'next-auth';
 const users = [
   {
     id: '1',
-    name: 'Admin Test',
-    email: 'admin@apodata.fr',
+    name: 'Admin',
+    email: 'admin@phardev.fr',
     password: 'admin123', // Dans une vraie app, utiliser bcrypt
     role: 'admin',
-    pharmacyName: 'Pharmacie Test'
+    pharmacyName: 'Admin'
   }
 ];
 
