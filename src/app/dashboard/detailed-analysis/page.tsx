@@ -5,17 +5,45 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import Link from 'next/link';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiBox, FiPackage, FiGrid, FiSearch, FiBarChart, FiTrendingUp } from 'react-icons/fi';
+import { AnalysisCategoryCard } from '@/components/dashboard/analysis/AnalysisCategoryCard';
+import { StatisticsSection } from '@/components/dashboard/analysis/StatisticsSection';
 
 /**
  * Page d'analyse détaillée
  * 
- * Cette page servira à l'exploration détaillée des données par produit,
+ * Cette page sert de hub pour l'exploration détaillée des données par produit,
  * laboratoire ou marché.
  */
 export default function DetailedAnalysisPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  // Données simulées pour les tops 3
+  const topProducts = [
+    { name: 'Doliprane 1000mg', value: '342 ventes', change: '+8.4%' },
+    { name: 'Efferalgan 500mg', value: '285 ventes', change: '+4.2%' },
+    { name: 'Amoxicilline Biogaran', value: '210 ventes', change: '+12.8%' },
+  ];
+
+  const topLabs = [
+    { name: 'Sanofi', value: '1245 ventes', change: '+3.2%' },
+    { name: 'Pfizer', value: '986 ventes', change: '+1.8%' },
+    { name: 'Biogaran', value: '854 ventes', change: '-2.1%' },
+  ];
+
+  const topMarkets = [
+    { name: 'Douleur & Fièvre', value: '2450 ventes', change: '+5.7%' },
+    { name: 'Vitamines', value: '1320 ventes', change: '+9.8%' },
+    { name: 'Antibiotiques', value: '965 ventes', change: '-1.2%' },
+  ];
+
+  const globalStats = [
+    { label: 'Produits analysés', value: '3,842' },
+    { label: 'Laboratoires', value: '164' },
+    { label: 'Marchés', value: '42' },
+    { label: 'Analyses effectuées', value: '1,293' },
+  ];
 
   // Redirection si non authentifié
   useEffect(() => {
@@ -55,35 +83,52 @@ export default function DetailedAnalysisPage() {
           subtitle="Explorez les données spécifiques par produit, laboratoire ou marché"
         />
         
-        {/* Contenu de la page (placeholder) */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-          <p className="text-gray-700 dark:text-gray-300">
-            Cette page permettra d'explorer en détail les performances par produit, 
-            par laboratoire ou par marché. Implémentez ici vos filtres, tableaux de données
-            et visualisations spécifiques.
-          </p>
+        {/* Contenu de la page avec carte d'analyse */}
+        <div className="grid md:grid-cols-3 gap-6">
+          <AnalysisCategoryCard
+            title="Par produit"
+            description="Analysez les performances de chaque produit individuellement avec des recherches par code EAN13 ou nom."
+            icon={<FiBox size={22} />}
+            buttonIcon={<FiSearch className="mr-2" size={16} />}
+            buttonText="Rechercher un produit"
+            linkPath="/dashboard/detailed-analysis/product-analysis"
+            topItems={topProducts}
+            topTitle="Top 3 Produits"
+            bgColorClass="bg-blue-100 dark:bg-blue-900/30"
+            textColorClass="text-blue-600 dark:text-blue-300"
+          />
           
-          <div className="mt-6 grid md:grid-cols-3 gap-6">
-            <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-              <h3 className="font-medium mb-2 text-gray-900 dark:text-white">Par produit</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Analysez les performances de chaque produit individuellement.
-              </p>
-            </div>
-            <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-              <h3 className="font-medium mb-2 text-gray-900 dark:text-white">Par laboratoire</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Évaluez les performances par fabricant ou laboratoire.
-              </p>
-            </div>
-            <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-              <h3 className="font-medium mb-2 text-gray-900 dark:text-white">Par marché</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Analysez les tendances par segment de marché ou catégorie.
-              </p>
-            </div>
-          </div>
+          <AnalysisCategoryCard
+            title="Par laboratoire"
+            description="Évaluez les performances par fabricant ou laboratoire pour identifier les partenaires stratégiques."
+            icon={<FiPackage size={22} />}
+            buttonIcon={<FiBarChart className="mr-2" size={16} />}
+            buttonText="Explorer les laboratoires"
+            linkPath="/dashboard/detailed-analysis/lab-analysis"
+            topItems={topLabs}
+            topTitle="Top 3 Laboratoires"
+            bgColorClass="bg-purple-100 dark:bg-purple-900/30"
+            textColorClass="text-purple-600 dark:text-purple-300"
+          />
+          
+          <AnalysisCategoryCard
+            title="Par marché"
+            description="Analysez les tendances et performances par segment de marché ou catégorie thérapeutique pour optimiser votre offre commerciale."
+            icon={<FiGrid size={22} />}
+            buttonIcon={<FiTrendingUp className="mr-2" size={16} />}
+            buttonText="Analyser les marchés"
+            linkPath="/dashboard/detailed-analysis/market-analysis"
+            topItems={topMarkets}
+            topTitle="Top 3 Marchés"
+            bgColorClass="bg-green-100 dark:bg-green-900/30"
+            textColorClass="text-green-600 dark:text-green-300"
+          />
         </div>
+        
+        <StatisticsSection
+          title="Statistiques globales d'analyse"
+          stats={globalStats}
+        />
       </div>
     </div>
   );
