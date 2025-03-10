@@ -50,11 +50,6 @@ export function Hero() {
         
         {/* Right column: Visual element */}
         <div className="relative h-full flex justify-center lg:justify-end items-center">
-          {/* Decorative background element */}
-          <div className="absolute inset-0 -z-10 overflow-hidden">
-            <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-sky-100 dark:bg-sky-900/20 blur-3xl opacity-70"></div>
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-teal-100 dark:bg-teal-900/20 blur-3xl opacity-70"></div>
-          </div>
           
           {/* Dashboard mockup/illustration */}
           <div className="relative w-full max-w-lg aspect-[4/3] bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
