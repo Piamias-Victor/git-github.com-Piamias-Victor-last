@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FiMenu } from "react-icons/fi";
 
 /**
@@ -13,7 +14,7 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo and brand name */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               {/* Logo placeholder - replace with actual logo */}
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-blue-600 flex items-center justify-center text-white font-bold">
                 A
@@ -21,7 +22,7 @@ export function Header() {
               <span className="text-xl font-semibold text-gray-900 dark:text-white">
                 Apo Data
               </span>
-            </a>
+            </Link>
           </div>
           
           {/* Navigation links - desktop */}
@@ -29,24 +30,24 @@ export function Header() {
             <a href="#features" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
               Fonctionnalités
             </a>
-            <a href="#" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-              Témoignages
-            </a>
-            <a href="#" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
-              Tarifs
-            </a>
-            <a href="#" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
+            <a href="#about" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
               À propos
+            </a>
+            <a href="#objectives" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
+              Objectifs
+            </a>
+            <a href="#contact" className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">
+              Contact
             </a>
           </nav>
           
-          {/* Call to action button */}
+          {/* Login button */}
           <div className="flex items-center gap-3">
             <a 
-              href="#demo" 
+              href="#" 
               className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors duration-200"
             >
-              Demander une démo
+              Se connecter
             </a>
             
             {/* Mobile menu button - for simplicity not implementing full mobile menu */}

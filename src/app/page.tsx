@@ -1,9 +1,8 @@
-import { Hero } from "@/components/Hero";
-import { Features } from "@/components/Features";
-import { About } from "@/components/About";
-import { Objectives } from "@/components/Objectives";
-import { Contact } from "@/components/Contact";
-import { Footer } from "@/components/Footer";
+import { Hero } from "@/components/home/Hero";
+import { Features } from "@/components/home/Features";
+import { About } from "@/components/home/About";
+import { Objectives } from "@/components/home/Objectives";
+import { Contact } from "@/components/home/Contact";
 
 /**
  * Home Page Component
@@ -40,7 +39,6 @@ export default function Home() {
       </main>
       
       {/* Footer */}
-      <Footer />
     </div>
   );
 }
