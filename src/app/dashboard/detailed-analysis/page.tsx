@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { FiArrowLeft, FiBox, FiPackage, FiGrid, FiSearch, FiBarChart, FiTrendingUp } from 'react-icons/fi';
 import { AnalysisCategoryCard } from '@/components/dashboard/analysis/AnalysisCategoryCard';
 import { StatisticsSection } from '@/components/dashboard/analysis/StatisticsSection';
+import { createUrlWithCurrentDateParams } from '@/utils/navigationUtils';
 
 /**
  * Page d'analyse détaillée
@@ -71,7 +72,7 @@ export default function DetailedAnalysisPage() {
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <Link 
-            href="/dashboard" 
+            href={createUrlWithCurrentDateParams("/dashboard")} 
             className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
           >
             <FiArrowLeft className="mr-2" /> Retour au tableau de bord

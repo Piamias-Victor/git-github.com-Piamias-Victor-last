@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FiAlertTriangle, FiPackage, FiActivity, FiDatabase } from 'react-icons/fi';
+import { useUrlWithDateParams } from '@/utils/navigationUtils';
 
 interface ActionItemProps {
   title: string;
@@ -13,6 +14,8 @@ interface ActionItemProps {
  * Component ActionItem individuel
  */
 function ActionItem({ title, count, icon, linkPath }: ActionItemProps) {
+  const { getUrl } = useUrlWithDateParams();
+  
   // Fonction pour rendre l'icône appropriée
   const renderIcon = () => {
     switch (icon) {
@@ -30,7 +33,7 @@ function ActionItem({ title, count, icon, linkPath }: ActionItemProps) {
   };
 
   return (
-    <Link href={linkPath} className="block">
+    <Link href={getUrl(linkPath)} className="block">
       <div className="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
         <div className="flex-shrink-0 rounded-full p-2 bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300">
           {renderIcon()}
@@ -61,6 +64,8 @@ interface ActionItemsProps {
  * Affiche une liste d'actions à mener basée sur l'analyse des données.
  */
 export function ActionItems({ data }: ActionItemsProps) {
+  const { getUrl } = useUrlWithDateParams();
+  
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
@@ -68,7 +73,7 @@ export function ActionItems({ data }: ActionItemsProps) {
           Actions à mener
         </h2>
         <Link 
-          href="/dashboard/actions" 
+          href={getUrl("/dashboard/actions")} 
           className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
         >
           Voir toutes les actions

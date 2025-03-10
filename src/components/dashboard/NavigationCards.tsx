@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FiBarChart2, FiMinimize } from 'react-icons/fi';
+import { useUrlWithDateParams } from '@/utils/navigationUtils';
 
 interface NavigationCardProps {
   title: string;
@@ -13,8 +14,10 @@ interface NavigationCardProps {
  * Component NavigationCard individuel
  */
 function NavigationCard({ title, description, linkPath, icon }: NavigationCardProps) {
+  const { getUrl } = useUrlWithDateParams();
+  
   return (
-    <Link href={linkPath} className="block h-full">
+    <Link href={getUrl(linkPath)} className="block h-full">
       <div className="h-full bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200 p-6">
         <div className="flex items-center mb-4">
           <div className="rounded-full p-3 bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300">

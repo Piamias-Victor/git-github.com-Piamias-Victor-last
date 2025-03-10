@@ -47,32 +47,66 @@ export function DateRangeProvider({ children }: DateRangeProviderProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Initialiser à partir des paramètres d'URL au chargement
+  // Initialiser à partir des paramètres d'URL au chargement ou de localStorage s'il existe
   useEffect(() => {
-    const rangeParam = searchParams.get('range') || 'thisMonth';
+    // Vérifier d'abord si nous avons des paramètres stockés dans localStorage
+    const storedRange = localStorage.getItem('apodata_date_range');
+    const storedStartDate = localStorage.getItem('apodata_start_date');
+    const storedEndDate = localStorage.getItem('apodata_end_date');
+    const storedDisplayLabel = localStorage.getItem('apodata_display_label');
+
+    // Priorité aux paramètres d'URL s'ils existent
+    const rangeParam = searchParams.get('range');
     const startParam = searchParams.get('startDate');
     const endParam = searchParams.get('endDate');
+
+    // Utiliser les paramètres d'URL s'ils existent, sinon localStorage, sinon la valeur par défaut
+    const effectiveRange = rangeParam || storedRange || 'thisMonth';
     
-    setRange(rangeParam);
+    setRange(effectiveRange);
     
     // Mettre à jour le label d'affichage en fonction de la plage
-    if (rangeParam === 'custom' && startParam && endParam) {
+    if (effectiveRange === 'custom' && 
+        ((startParam && endParam) || (storedStartDate && storedEndDate))) {
       // Pour les dates personnalisées
-      setStartDate(startParam);
-      setEndDate(endParam);
-      setDisplayLabel(`${formatDateForDisplay(startParam)} - ${formatDateForDisplay(endParam)}`);
+      const finalStartDate = startParam || storedStartDate || '';
+      const finalEndDate = endParam || storedEndDate || '';
+      
+      setStartDate(finalStartDate);
+      setEndDate(finalEndDate);
+      
+      const finalLabel = `${formatDateForDisplay(finalStartDate)} - ${formatDateForDisplay(finalEndDate)}`;
+      setDisplayLabel(finalLabel);
+      
+      // Stocker dans localStorage
+      localStorage.setItem('apodata_start_date', finalStartDate);
+      localStorage.setItem('apodata_end_date', finalEndDate);
+      localStorage.setItem('apodata_display_label', finalLabel);
     } else {
       // Pour les plages prédéfinies
-      const preset = PRESET_RANGES.find(p => p.value === rangeParam);
+      const preset = PRESET_RANGES.find(p => p.value === effectiveRange);
+      let finalLabel = '';
+      
       if (preset) {
-        setDisplayLabel(preset.label);
+        finalLabel = preset.label;
+        setDisplayLabel(finalLabel);
+      } else if (storedDisplayLabel) {
+        finalLabel = storedDisplayLabel;
+        setDisplayLabel(storedDisplayLabel);
       }
       
       // Calculer les dates correspondantes
-      const { startDate, endDate } = getDateRangeFromPreset(rangeParam);
+      const { startDate, endDate } = getDateRangeFromPreset(effectiveRange);
       setStartDate(startDate);
       setEndDate(endDate);
+      
+      // Stocker dans localStorage
+      localStorage.setItem('apodata_display_label', finalLabel);
     }
+    
+    // Toujours stocker la plage actuelle dans localStorage
+    localStorage.setItem('apodata_date_range', effectiveRange);
+    
   }, [searchParams]);
 
   // Fonction pour mettre à jour la plage de dates
@@ -80,22 +114,47 @@ export function DateRangeProvider({ children }: DateRangeProviderProps) {
     const params = new URLSearchParams(searchParams.toString());
     
     params.set('range', newRange);
+    localStorage.setItem('apodata_date_range', newRange);
+    setRange(newRange);
     
     if (newRange === 'custom' && start && end) {
+      // Pour les plages personnalisées
       params.set('startDate', start);
       params.set('endDate', end);
-      setDisplayLabel(`${formatDateForDisplay(start)} - ${formatDateForDisplay(end)}`);
+      
+      const newLabel = `${formatDateForDisplay(start)} - ${formatDateForDisplay(end)}`;
+      setDisplayLabel(newLabel);
+      
+      // Mettre à jour l'état interne
+      setStartDate(start);
+      setEndDate(end);
+      
+      // Stocker dans localStorage
+      localStorage.setItem('apodata_start_date', start);
+      localStorage.setItem('apodata_end_date', end);
+      localStorage.setItem('apodata_display_label', newLabel);
     } else {
       // Pour les plages prédéfinies
       if (params.has('startDate')) params.delete('startDate');
       if (params.has('endDate')) params.delete('endDate');
       
+      // Supprimer du localStorage les dates personnalisées
+      localStorage.removeItem('apodata_start_date');
+      localStorage.removeItem('apodata_end_date');
+      
       const preset = PRESET_RANGES.find(p => p.value === newRange);
       if (preset) {
         setDisplayLabel(preset.label);
+        localStorage.setItem('apodata_display_label', preset.label);
       }
+      
+      // Calculer et mettre à jour les dates correspondantes
+      const { startDate, endDate } = getDateRangeFromPreset(newRange);
+      setStartDate(startDate);
+      setEndDate(endDate);
     }
     
+    // Mettre à jour l'URL avec les nouveaux paramètres
     router.push(`${pathname}?${params.toString()}`);
   };
 

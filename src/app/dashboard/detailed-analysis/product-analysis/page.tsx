@@ -9,6 +9,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { ProductSearch } from '@/components/dashboard/analysis/ProductSearch';
 import { ProductResultTable } from '@/components/dashboard/analysis/ProductResultTable';
 import { SearchHelp } from '@/components/dashboard/analysis/SearchHelp';
+import { createUrlWithCurrentDateParams } from '@/utils/navigationUtils';
 
 /**
  * Page d'analyse détaillée par produit
@@ -44,7 +45,7 @@ export default function ProductAnalysisPage() {
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <Link 
-            href="/dashboard/detailed-analysis" 
+            href={createUrlWithCurrentDateParams("/dashboard/detailed-analysis")} 
             className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
           >
             <FiArrowLeft className="mr-2" /> Retour à l'analyse détaillée

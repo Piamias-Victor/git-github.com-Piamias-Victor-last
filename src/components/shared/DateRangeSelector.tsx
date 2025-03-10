@@ -29,14 +29,31 @@ export function DateRangeSelector() {
     
     if (rangeParam) {
       setSelectedRange(rangeParam);
+    } else {
+      // Si pas de paramètre dans l'URL, vérifier dans localStorage
+      const storedRange = localStorage.getItem('apodata_date_range');
+      if (storedRange) {
+        setSelectedRange(storedRange);
+      }
     }
     
     if (start) setStartDate(start);
+    else {
+      const storedStart = localStorage.getItem('apodata_start_date');
+      if (storedStart) setStartDate(storedStart);
+    }
+    
     if (end) setEndDate(end);
+    else {
+      const storedEnd = localStorage.getItem('apodata_end_date');
+      if (storedEnd) setEndDate(storedEnd);
+    }
     
     // Si on a des dates personnalisées
-    if (start && end && (!rangeParam || rangeParam === 'custom')) {
-      setSelectedRange('custom');
+    if ((start && end) || (localStorage.getItem('apodata_start_date') && localStorage.getItem('apodata_end_date'))) {
+      if (!rangeParam || rangeParam === 'custom') {
+        setSelectedRange('custom');
+      }
     }
   }, [searchParams]);
 

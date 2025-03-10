@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { TopItems } from '@/components/dashboard/analysis/TopItems';
+import { useUrlWithDateParams } from '@/utils/navigationUtils';
 
 interface AnalysisCategoryCardProps {
   title: string;
@@ -35,6 +36,8 @@ export function AnalysisCategoryCard({
   bgColorClass,
   textColorClass
 }: AnalysisCategoryCardProps) {
+  const { getUrl } = useUrlWithDateParams();
+  
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
       <div className="flex items-center mb-4">
@@ -50,7 +53,7 @@ export function AnalysisCategoryCard({
       </p>
       
       <Link 
-        href={linkPath}
+        href={getUrl(linkPath)}
         className="inline-flex items-center justify-center w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
       >
         {buttonIcon}
