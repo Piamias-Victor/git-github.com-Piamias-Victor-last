@@ -11,6 +11,7 @@ import { ProductSearchStats } from '@/components/dashboard/products/ProductSearc
 import { SearchHelp } from '@/components/dashboard/analysis/SearchHelp';
 import { createUrlWithCurrentDateParams } from '@/utils/navigationUtils';
 import { ProductSearch } from '@/components/dashboard/products/ProductSearch';
+import { ProductsAggregateCharts } from '@/components/dashboard/products/ProductsAggregateCharts';
 
 // Données de test pour démonstration
 const mockProductData: Product[] = [
@@ -161,6 +162,8 @@ export default function ProductAnalysisPage() {
         
         {/* Statistiques des résultats */}
         {searchResults.length > 0 && <ProductSearchStats products={searchResults} />}
+
+        {searchResults.length > 0 && <ProductsAggregateCharts products={searchResults} />}
         
         {/* Tableau des résultats */}
         <ProductResultTable products={searchResults} />
