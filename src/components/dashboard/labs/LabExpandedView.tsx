@@ -4,6 +4,7 @@ import { FiInfo, FiTrendingUp, FiPackage, FiPieChart, FiGlobe } from 'react-icon
 import { Laboratory } from './LabResultTable';
 import { Tabs, TabItem } from '@/components/ui/Tabs';
 import { Card } from '@/components/ui/Card';
+import { LabDetailsTab } from './LabDetailsTab';
 
 
 interface LabExpandedViewProps {
@@ -22,8 +23,7 @@ export function LabExpandedView({ laboratory }: LabExpandedViewProps) {
           <FiInfo className="mr-2" size={16} /> Détails
         </div>
       ),
-      content: <></>
-    //   content: <LabDetailsTab laboratory={laboratory} />
+      content: <LabDetailsTab laboratory={laboratory} />
     },
     {
       id: 'performance',

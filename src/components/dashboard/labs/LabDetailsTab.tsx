@@ -1,6 +1,17 @@
-// src/components/dashboard/labs/tabs/LabDetailsTab.tsx
+// src/components/dashboard/labs/LabDetailsTab.tsx
 import React from 'react';
-import { Laboratory } from './LabResultTable';
+
+interface Laboratory {
+  id: string;
+  name: string;
+  products: number;
+  revenue: {
+    sellOut: number;
+    sellIn: number;
+  };
+  growth: string;
+  margin: string;
+}
 
 interface LabDetailsTabProps {
   laboratory: Laboratory;
@@ -24,6 +35,11 @@ export function LabDetailsTab({ laboratory }: LabDetailsTabProps) {
     zones: ["Europe", "Amérique du Nord", "Asie"]
   };
 
+  // Formatage des valeurs monétaires
+  const formatCurrency = (value: number) => {
+    return value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
       {/* Colonne de gauche - Informations générales */}
@@ -44,9 +60,16 @@ export function LabDetailsTab({ laboratory }: LabDetailsTabProps) {
           </div>
           
           <div>
-            <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Chiffre d'affaires</h4>
+            <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Chiffre d'affaires Sell-out</h4>
             <p className="text-base text-gray-900 dark:text-white">
-              {laboratory.revenue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} €
+              {formatCurrency(laboratory.revenue.sellOut)}
+            </p>
+          </div>
+          
+          <div>
+            <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Chiffre d'affaires Sell-in</h4>
+            <p className="text-base text-gray-900 dark:text-white">
+              {formatCurrency(laboratory.revenue.sellIn)}
             </p>
           </div>
           

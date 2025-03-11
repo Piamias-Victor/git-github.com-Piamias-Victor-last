@@ -6,7 +6,10 @@ interface Laboratory {
   id: string;
   name: string;
   products: number;
-  revenue: number;
+  revenue: {
+    sellOut: number;
+    sellIn: number;
+  };
   growth: string;
   margin: string;
 }
@@ -25,19 +28,20 @@ export function LabSearchStats({ laboratories }: LabSearchStatsProps) {
 
   // Calculer les statistiques agrégées
   const totalProducts = laboratories.reduce((sum, lab) => sum + lab.products, 0);
-  const totalRevenue = laboratories.reduce((sum, lab) => sum + lab.revenue, 0);
+  const totalSellOut = laboratories.reduce((sum, lab) => sum + lab.revenue.sellOut, 0);
+  const totalSellIn = laboratories.reduce((sum, lab) => sum + lab.revenue.sellIn, 0);
   
-  // Calculer le taux de croissance moyen pondéré par le chiffre d'affaires
+  // Calculer le taux de croissance moyen pondéré par le chiffre d'affaires sell-out
   const weightedGrowth = laboratories.reduce((sum, lab) => {
     const growthValue = parseFloat(lab.growth.replace('%', '').replace('+', ''));
-    return sum + (growthValue * lab.revenue);
-  }, 0) / totalRevenue;
+    return sum + (growthValue * lab.revenue.sellOut);
+  }, 0) / totalSellOut;
   
-  // Calculer la marge moyenne pondérée par le chiffre d'affaires
+  // Calculer la marge moyenne pondérée par le chiffre d'affaires sell-out
   const weightedMargin = laboratories.reduce((sum, lab) => {
     const marginValue = parseFloat(lab.margin.replace('%', ''));
-    return sum + (marginValue * lab.revenue);
-  }, 0) / totalRevenue;
+    return sum + (marginValue * lab.revenue.sellOut);
+  }, 0) / totalSellOut;
   
   // Formatage des valeurs monétaires
   const formatCurrency = (value: number) => {
@@ -62,8 +66,13 @@ export function LabSearchStats({ laboratories }: LabSearchStatsProps) {
         </div>
         
         <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Chiffre d'affaires</p>
-          <p className="text-lg font-semibold text-gray-900 dark:text-white">{formatCurrency(totalRevenue)}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">CA Sell-out</p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-white">{formatCurrency(totalSellOut)}</p>
+        </div>
+        
+        <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+          <p className="text-xs text-gray-500 dark:text-gray-400">CA Sell-in</p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-white">{formatCurrency(totalSellIn)}</p>
         </div>
         
         <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">

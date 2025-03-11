@@ -7,7 +7,10 @@ export interface Laboratory {
   id: string;
   name: string;
   products: number;
-  revenue: number;
+  revenue: {
+    sellOut: number;
+    sellIn: number;
+  };
   growth: string;
   margin: string;
 }
@@ -55,7 +58,10 @@ export function LabResultTable({ laboratories }: LabResultTableProps) {
                   Produits
                 </th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Chiffre d'affaires
+                  CA Sell-out
+                </th>
+                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  CA Sell-in
                 </th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Croissance
@@ -81,7 +87,10 @@ export function LabResultTable({ laboratories }: LabResultTableProps) {
                       {lab.products}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-900 dark:text-white">
-                      {formatCurrency(lab.revenue)}
+                      {formatCurrency(lab.revenue.sellOut)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-900 dark:text-white">
+                      {formatCurrency(lab.revenue.sellIn)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                       <span className={`flex items-center justify-end ${lab.growth.startsWith('-') ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
@@ -107,7 +116,7 @@ export function LabResultTable({ laboratories }: LabResultTableProps) {
                   </tr>
                   {expandedLabId === lab.id && (
                     <tr className="bg-indigo-50 dark:bg-indigo-900/20">
-                      <td colSpan={6} className="px-6 py-4">
+                      <td colSpan={7} className="px-6 py-4">
                         <LabExpandedView laboratory={lab} />
                       </td>
                     </tr>
