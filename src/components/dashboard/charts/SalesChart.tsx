@@ -6,8 +6,15 @@ import { ChartLegend } from '@/components/dashboard/charts/ChartLegend';
 import { formatChartDate, formatTooltipDate, formatDisplayDate } from '@/utils/dateFormatUtils';
 import { SummaryCard } from '../products/summaries/SummaryCard';
 
+interface SalesData {
+  date: string;
+  quantity: number;
+  revenue: number;
+  margin: number;
+}
+
 interface SalesChartProps {
-  data: any[];
+  data: SalesData[];
   isLoading: boolean;
   error: string | null;
   startDate: string;
@@ -15,17 +22,14 @@ interface SalesChartProps {
 }
 
 export function SalesChart({ data, isLoading, error, startDate, endDate }: SalesChartProps) {
-  if (isLoading) return <LoadingState height="60" message="Génération des graphiques d'analyse globale..." />;
-  if (error) return <ErrorState message={error} />;
-
-  // Définition des séries pour les graphiques
+  // Définition des séries pour les graphiques - déplacé hors des conditions
   const salesSeries = [
     { dataKey: "quantity", name: "Quantité vendue", color: "#4F46E5" },
     { dataKey: "revenue", name: "CA (€)", color: "#10B981" },
     { dataKey: "margin", name: "Marge (€)", color: "#F59E0B" }
   ];
 
-  // Calcul des statistiques pour les SummaryCards
+  // Calcul des statistiques pour les SummaryCards - déplacé avant les retours conditionnels
   const metrics = useMemo(() => {
     if (!data || data.length === 0) return null;
 
@@ -40,6 +44,19 @@ export function SalesChart({ data, isLoading, error, startDate, endDate }: Sales
     // Calcul des tendances (comparaison du dernier mois avec la moyenne des mois précédents)
     const lastMonthIndex = data.length - 1;
     const lastMonth = data[lastMonthIndex];
+    
+    // Vérifier qu'il y a suffisamment de données pour calculer les moyennes
+    if (lastMonthIndex <= 0) {
+      return {
+        totalQuantity,
+        totalRevenue: totalRevenue.toFixed(2),
+        totalMargin: totalMargin.toFixed(2),
+        marginRate: marginRate.toFixed(1),
+        quantityTrend: "0.0",
+        revenueTrend: "0.0",
+        marginTrend: "0.0",
+      };
+    }
     
     // Calculer les moyennes des mois précédents
     const previousMonths = data.slice(0, lastMonthIndex);
@@ -62,6 +79,10 @@ export function SalesChart({ data, isLoading, error, startDate, endDate }: Sales
       marginTrend: marginTrend.toFixed(1),
     };
   }, [data]);
+
+  // Maintenant les retours conditionnels
+  if (isLoading) return <LoadingState height="60" message="Génération des graphiques d'analyse globale..." />;
+  if (error) return <ErrorState message={error} />;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
@@ -91,7 +112,7 @@ export function SalesChart({ data, isLoading, error, startDate, endDate }: Sales
                 borderColor: '#E5E7EB',
                 color: '#111827',
               }} 
-              formatter={(value: any) => [`${value}`, '']}
+              formatter={(value: number | string) => [`${value}`, '']}
               labelFormatter={formatTooltipDate}
             />
             {salesSeries.map(serie => (

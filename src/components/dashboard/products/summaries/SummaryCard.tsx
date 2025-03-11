@@ -26,7 +26,7 @@ type IconType = 'alert' | 'alert-circle' | 'check-circle' | 'inbox' |
 interface SummaryCardProps {
   title: string;
   description: string;
-  value: number | string;
+  value: any;
   icon: IconType;
   colorScheme: ColorScheme;
   filterType: string;

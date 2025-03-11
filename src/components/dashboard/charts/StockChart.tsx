@@ -6,8 +6,15 @@ import { ChartLegend } from '@/components/dashboard/charts/ChartLegend';
 import { formatChartDate, formatTooltipDate, formatDisplayDate } from '@/utils/dateFormatUtils';
 import { SummaryCard } from '../products/summaries/SummaryCard';
 
+interface StockData {
+  date: string;
+  stock: number;
+  stockValue: number;
+  stockouts: number;
+}
+
 interface StockChartProps {
-  data: any[];
+  data: StockData[];
   isLoading: boolean;
   error: string | null;
   startDate: string;
@@ -15,10 +22,7 @@ interface StockChartProps {
 }
 
 export function StockChart({ data, isLoading, error, startDate, endDate }: StockChartProps) {
-  if (isLoading) return <LoadingState height="60" message="Génération des graphiques d'analyse de stock..." />;
-  if (error) return <ErrorState message={error} />;
-
-  // Vérifier et assurer que les données contiennent des ruptures
+  // Vérifier et assurer que les données contiennent des ruptures - déplacé en dehors des conditions
   const processedData = useMemo(() => {
     if (!data || data.length === 0) return [];
     
@@ -29,14 +33,14 @@ export function StockChart({ data, isLoading, error, startDate, endDate }: Stock
     }));
   }, [data]);
 
-  // Définition des séries pour les graphiques
+  // Définition des séries pour les graphiques - déplacé en dehors des conditions
   const stockSeries = [
     { dataKey: "stock", name: "Quantité en stock", color: "#4F46E5" },
     { dataKey: "stockValue", name: "Valeur du stock (€)", color: "#10B981" },
     { dataKey: "stockouts", name: "Produits en rupture", color: "#EF4444" }
   ];
 
-  // Calcul des statistiques pour les SummaryCards
+  // Calcul des statistiques pour les SummaryCards - déplacé en dehors des conditions
   const metrics = useMemo(() => {
     if (!processedData || processedData.length === 0) return null;
 
@@ -60,8 +64,12 @@ export function StockChart({ data, isLoading, error, startDate, endDate }: Stock
     };
   }, [processedData]);
 
+  // Maintenant les conditions
+  if (isLoading) return <LoadingState height="60" message="Génération des graphiques d'analyse de stock..." />;
+  if (error) return <ErrorState message={error} />;
+
   // Formatage personnalisé pour le tooltip
-  const formatTooltipValue = (value: any, name: string) => {
+  const formatTooltipValue = (value: number | string, name: string) => {
     switch (name) {
       case 'stockouts':
         return [value, 'Produits en rupture'];
@@ -168,7 +176,7 @@ export function StockChart({ data, isLoading, error, startDate, endDate }: Stock
             title="Quantité de Rupture"
             description="Total des produits en rupture"
             value={metrics.totalStockouts.toString()}
-            icon="alert-triangle"
+            icon="alert"
             colorScheme={
               metrics.totalStockouts === 0 ? "green" : 
               metrics.totalStockouts < 3 ? "amber" : "red"
