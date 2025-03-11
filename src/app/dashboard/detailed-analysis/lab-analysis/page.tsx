@@ -2,10 +2,14 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
+import { LabSearch } from '@/components/dashboard/labs/LabSearch';
+import { LabResultTable } from '@/components/dashboard/labs/LabResultTable';
+import { LabSearchStats } from '@/components/dashboard/labs/LabSearchStats';
+import { Laboratory } from '@/components/dashboard/labs/LabResultTable';
 
 /**
  * Page d'analyse détaillée par laboratoire
@@ -13,6 +17,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 export default function LabAnalysisPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [searchResults, setSearchResults] = useState<Laboratory[]>([]);
 
   // Redirection si non authentifié
   useEffect(() => {
@@ -20,6 +25,13 @@ export default function LabAnalysisPage() {
       router.push('/auth/login');
     }
   }, [status, router]);
+
+  // Simuler une recherche avec nos données de test
+  const handleSearch = (results: any[]) => {
+    // Dans une vraie application, ce serait un appel API réel
+    // Ici, on utilise directement les résultats du mock de la fonction de recherche
+    setSearchResults(results);
+  };
 
   // Afficher un état de chargement si la session est en cours de chargement
   if (status === 'loading') {
@@ -52,26 +64,27 @@ export default function LabAnalysisPage() {
           subtitle="Explorez les performances par fabricant ou laboratoire"
         />
         
-        {/* Contenu de la page (placeholder) */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-          <p className="text-gray-700 dark:text-gray-300">
-            Cette page permet d'analyser les performances par laboratoire. Dans une application complète, 
-            vous pourriez implémenter ici une recherche de laboratoires, des filtres et des visualisations spécifiques.
-          </p>
-          
-          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-              Fonctionnalités à implémenter
-            </h3>
-            <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300">
-              <li>Recherche de laboratoires par nom</li>
-              <li>Filtre par volume de ventes</li>
-              <li>Comparaison de performances entre laboratoires</li>
-              <li>Analyse des marges par laboratoire</li>
-              <li>Évolution des ventes sur différentes périodes</li>
-            </ul>
+        {/* Composant de recherche de laboratoires */}
+        <LabSearch onSearch={handleSearch} />
+        
+        {/* Statistiques de recherche */}
+        {searchResults.length > 0 && (
+          <LabSearchStats laboratories={searchResults} />
+        )}
+        
+        {/* Tableau des résultats */}
+        {searchResults.length > 0 && (
+          <LabResultTable laboratories={searchResults} />
+        )}
+        
+        {/* Placeholder si aucun résultat */}
+        {searchResults.length === 0 && (
+          <div className="mt-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+            <p className="text-gray-700 dark:text-gray-300 text-center">
+              Utilisez la barre de recherche ci-dessus pour trouver des laboratoires par nom.
+            </p>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
