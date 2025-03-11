@@ -2,6 +2,7 @@
 import { useMemo } from 'react';
 import { Product } from '@/components/dashboard/products/ProductResultTable';
 import { Laboratory } from '@/components/dashboard/labs/LabResultTable';
+import { enrichProductsWithSegmentData, generateLaboratoryPositioning } from './mockSegmentData';
 
 // Types pour les données du TreeMap
 export interface TreeMapData {
@@ -33,6 +34,22 @@ export interface SegmentStats {
   };
 }
 
+// Interface pour les données de positionnement
+export interface PositioningData {
+  segment: string;
+  segmentType: 'universe' | 'category' | 'family';
+  rank: number;
+  totalCompetitors: number;
+  marketShare: number;
+  leadingCompetitor: string;
+  leadingCompetitorShare: number;
+  competitors: {
+    name: string;
+    share: number;
+    isMain: boolean;
+  }[];
+}
+
 /**
  * Hook personnalisé pour extraire et analyser les données des segments de produits
  * pour les laboratoires sélectionnés
@@ -42,12 +59,17 @@ export function useSegmentData(
   allProducts: Product[],
   segmentType: SegmentType
 ) {
+  // Enrichir les données produit avec des segments si nécessaire
+  const enrichedProducts = useMemo(() => {
+    return enrichProductsWithSegmentData(allProducts);
+  }, [allProducts]);
+
   // Filtrer les produits des laboratoires sélectionnés
   const labProducts = useMemo(() => 
-    allProducts.filter(product => 
+    enrichedProducts.filter(product => 
       laboratories.some(lab => lab.name === product.laboratory)
     )
-  , [allProducts, laboratories]);
+  , [enrichedProducts, laboratories]);
 
   // Générer les données du TreeMap selon le segment actif
   const treeMapData = useMemo(() => {
@@ -137,9 +159,28 @@ export function useSegmentData(
     });
   }, [treeMapData]);
 
+  // Données de positionnement - seulement pour universe, category et family
+  const positioningData = useMemo(() => {
+    // Ne pas générer de positionnement pour les gammes
+    if (segmentType === 'range' || !stats.topSegment.name || laboratories.length === 0) {
+      return null;
+    }
+    
+    // Générer des données de positionnement pour le premier laboratoire
+    const mainLab = laboratories[0].name;
+    
+    // Pour chaque segmentType, utiliser le segment principal
+    return generateLaboratoryPositioning(
+      mainLab,
+      segmentType as 'universe' | 'category' | 'family',
+      stats.topSegment.name
+    );
+  }, [segmentType, stats.topSegment.name, laboratories]);
+
   return {
     treeMapData,
     stats,
-    segmentSalesData
+    segmentSalesData,
+    positioningData
   };
 }
