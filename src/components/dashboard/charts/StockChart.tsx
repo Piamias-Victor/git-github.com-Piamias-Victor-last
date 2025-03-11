@@ -1,6 +1,6 @@
 // src/components/dashboard/charts/StockChart.tsx
 import React, { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { LoadingState, ErrorState } from '@/components/ui/LoadingState';
 import { ChartLegend } from '@/components/dashboard/charts/ChartLegend';
 import { formatChartDate, formatTooltipDate, formatDisplayDate } from '@/utils/dateFormatUtils';
@@ -29,9 +29,6 @@ export function StockChart({ data, isLoading, error, startDate, endDate }: Stock
     }));
   }, [data]);
 
-  // Log pour débogage
-  console.log("StockChart: Données traitées", processedData);
-
   // Définition des séries pour les graphiques
   const stockSeries = [
     { dataKey: "stock", name: "Quantité en stock", color: "#4F46E5" },
@@ -43,57 +40,23 @@ export function StockChart({ data, isLoading, error, startDate, endDate }: Stock
   const metrics = useMemo(() => {
     if (!processedData || processedData.length === 0) return null;
 
-    // Obtenir les données du mois le plus récent
-    const latestMonth = processedData[processedData.length - 1];
-    
-    // Calculer la valeur totale moyenne du stock
-    const avgStockValue = processedData.reduce((sum, item) => sum + item.stockValue, 0) / processedData.length;
-    
     // Calculer le stock moyen
     const avgStock = processedData.reduce((sum, item) => sum + item.stock, 0) / processedData.length;
     
-    // Calculer les tendances
-    const previousMonth = processedData.length > 1 ? processedData[processedData.length - 2] : null;
+    // Calculer le montant de stock moyen
+    const avgStockValue = processedData.reduce((sum, item) => sum + item.stockValue, 0) / processedData.length;
     
-    let stockTrend = 0;
-    let valueTrend = 0;
-    
-    if (previousMonth) {
-      stockTrend = ((latestMonth.stock - previousMonth.stock) / previousMonth.stock) * 100;
-      valueTrend = ((latestMonth.stockValue - previousMonth.stockValue) / previousMonth.stockValue) * 100;
-    }
-    
-    // Calculer le nombre total de produits en rupture
+    // Calculer le total des ruptures
     const totalStockouts = processedData.reduce((sum, item) => sum + (item.stockouts || 0), 0);
     
-    // Estimer les jours de couverture (en supposant que les ventes mensuelles sont approximativement le stock / 2)
-    // Cela devrait être remplacé par un calcul basé sur les données réelles de vente dans une app complète
-    const estimatedMonthlySales = latestMonth.stock / 2;
-    const coverageDays = estimatedMonthlySales > 0 ? Math.round((latestMonth.stock / estimatedMonthlySales) * 30) : 0;
-    
-    // Calculer le taux de rotation (estimé)
-    const turnoverRate = estimatedMonthlySales / latestMonth.stock;
-    
-    // Obtenir le nombre de produits en rupture actuellement
-    const currentStockouts = latestMonth.stockouts || 0;
-    
-    // Calculer la tendance des ruptures
-    let stockoutTrend = 0;
-    if (previousMonth && previousMonth.stockouts > 0) {
-      stockoutTrend = ((currentStockouts - previousMonth.stockouts) / previousMonth.stockouts) * 100;
-    }
-    
+    // Définir un seuil de stock mini recommandé
+    const minStockThreshold = 20;
+
     return {
-      currentStock: latestMonth.stock,
-      currentValue: latestMonth.stockValue.toFixed(2),
-      stockTrend: stockTrend.toFixed(1),
-      valueTrend: valueTrend.toFixed(1),
+      avgStock: Math.round(avgStock),
       avgStockValue: avgStockValue.toFixed(2),
-      coverageDays,
-      turnoverRate: turnoverRate.toFixed(2),
       totalStockouts,
-      currentStockouts,
-      stockoutTrend: stockoutTrend.toFixed(1)
+      minStockThreshold
     };
   }, [processedData]);
 
@@ -180,66 +143,48 @@ export function StockChart({ data, isLoading, error, startDate, endDate }: Stock
       
       {/* Ajout des SummaryCards pour les métriques de stock */}
       {metrics && (
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
           <SummaryCard
-            title="Stock actuel"
-            description={`Tendance: ${Number(metrics.stockTrend) >= 0 ? '+' : ''}${metrics.stockTrend}%`}
-            value={metrics.currentStock.toString()}
+            title="Stock Moyen"
+            description="Moyenne des stocks"
+            value={metrics.avgStock.toString()}
             icon="inbox"
             colorScheme="blue"
             filterType="stock"
-            filterValue="current"
+            filterValue="average"
           />
           
           <SummaryCard
-            title="Valeur du stock"
-            description={`Tendance: ${Number(metrics.valueTrend) >= 0 ? '+' : ''}${metrics.valueTrend}%`}
-            value={`${metrics.currentValue} €`}
+            title="Montant Stock Moyen"
+            description="Valeur moyenne du stock"
+            value={`${metrics.avgStockValue} €`}
             icon="trending-up"
-            colorScheme={Number(metrics.valueTrend) > 5 ? "amber" : Number(metrics.valueTrend) < -5 ? "emerald" : "blue"}
+            colorScheme="emerald"
             filterType="stock"
-            filterValue="value"
+            filterValue="value-average"
           />
           
           <SummaryCard
-            title="Produits en rupture"
-            description={`Tendance: ${Number(metrics.stockoutTrend) >= 0 ? '+' : ''}${metrics.stockoutTrend}%`}
-            value={metrics.currentStockouts.toString()}
+            title="Quantité de Rupture"
+            description="Total des produits en rupture"
+            value={metrics.totalStockouts.toString()}
             icon="alert-triangle"
             colorScheme={
-              metrics.currentStockouts === 0 ? "green" : 
-              metrics.currentStockouts < 3 ? "amber" : "red"
+              metrics.totalStockouts === 0 ? "green" : 
+              metrics.totalStockouts < 3 ? "amber" : "red"
             }
             filterType="stock"
             filterValue="stockouts"
           />
           
           <SummaryCard
-            title="Couverture"
-            description="Estimation en jours"
-            value={`${metrics.coverageDays} jours`}
+            title="Seuil de Stock Mini"
+            description="Stock minimum recommandé"
+            value={`${metrics.minStockThreshold} unités`}
             icon="check-circle"
-            colorScheme={
-              metrics.coverageDays < 15 ? "red" : 
-              metrics.coverageDays < 30 ? "amber" : 
-              metrics.coverageDays > 60 ? "amber" : "green"
-            }
+            colorScheme="blue"
             filterType="stock"
-            filterValue="coverage"
-          />
-          
-          <SummaryCard
-            title="Taux de rotation"
-            description="Rotations par mois"
-            value={`${metrics.turnoverRate}x`}
-            icon="refresh-cw"
-            colorScheme={
-              Number(metrics.turnoverRate) < 0.5 ? "red" : 
-              Number(metrics.turnoverRate) < 1 ? "amber" : 
-              Number(metrics.turnoverRate) > 3 ? "green" : "emerald"
-            }
-            filterType="stock"
-            filterValue="turnover"
+            filterValue="min-threshold"
           />
         </div>
       )}

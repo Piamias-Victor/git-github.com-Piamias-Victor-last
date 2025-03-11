@@ -26,7 +26,7 @@ type IconType = 'alert' | 'alert-circle' | 'check-circle' | 'inbox' |
 interface SummaryCardProps {
   title: string;
   description: string;
-  value: number;
+  value: number | string;
   icon: IconType;
   colorScheme: ColorScheme;
   filterType: string;
@@ -124,7 +124,7 @@ export function SummaryCard({
         <div className={`text-xl font-bold ${textColors[colorScheme]}`}>
           {value}
         </div>
-        {value > 0 && (
+        {value > 0 && onShowDetails && (
           <FiExternalLink className={`ml-1.5 ${textColors[colorScheme]}`} size={16} />
         )}
       </div>
