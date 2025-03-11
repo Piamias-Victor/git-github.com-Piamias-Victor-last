@@ -1,3 +1,4 @@
+// src/components/dashboard/labs/LabComparisonChart.tsx
 import React, { useState } from 'react';
 import { LoadingState, ErrorState } from '@/components/ui/LoadingState';
 import { Card } from '@/components/ui/Card';
@@ -6,6 +7,8 @@ import { PharmacyMetricsCards } from '../products/comparison/PharmacyMetricsCard
 import { PharmacyRadarData, MetricDetailData } from '../products/comparison/types';
 import { Laboratory } from './LabResultTable';
 import { Product } from '../products/ProductResultTable';
+import { Tabs, TabItem } from '@/components/ui/Tabs';
+import { TopProductsComparisonCards } from '../products/TopProductsComparisonCards';
 
 // Hook personnalisé pour obtenir les données de comparaison de laboratoires
 function useLabComparisonData(
@@ -23,28 +26,38 @@ function useLabComparisonData(
   );
 
   // Calculer les métriques agrégées pour les laboratoires
-  const avgPrice = labProducts.reduce((sum, p) => sum + parseFloat(p.price), 0) / labProducts.length;
-  const avgMargin = labProducts.reduce((sum, p) => sum + parseFloat(p.margin), 0) / labProducts.length;
-  const avgRotation = labProducts.reduce((sum, p) => {
-    const rotation = p.stock > 0 ? p.sales / p.stock : 0;
-    return sum + rotation;
-  }, 0) / labProducts.length;
-  const avgStock = labProducts.reduce((sum, p) => sum + p.stock, 0) / labProducts.length;
-  const avgSales = labProducts.reduce((sum, p) => sum + p.sales, 0) / labProducts.length;
+  const avgPrice = labProducts.length > 0 
+    ? labProducts.reduce((sum, p) => sum + parseFloat(p.price), 0) / labProducts.length 
+    : 0;
+  const avgMargin = labProducts.length > 0 
+    ? labProducts.reduce((sum, p) => sum + parseFloat(p.margin), 0) / labProducts.length 
+    : 0;
+  const avgRotation = labProducts.length > 0 
+    ? labProducts.reduce((sum, p) => {
+        const rotation = p.stock > 0 ? p.sales / p.stock : 0;
+        return sum + rotation;
+      }, 0) / labProducts.length 
+    : 0;
+  const avgStock = labProducts.length > 0 
+    ? labProducts.reduce((sum, p) => sum + p.stock, 0) / labProducts.length 
+    : 0;
+  const avgSales = labProducts.length > 0 
+    ? labProducts.reduce((sum, p) => sum + p.sales, 0) / labProducts.length 
+    : 0;
 
   // Données simulées pour les laboratoires
   const comparisonData: PharmacyRadarData[] = [
     {
       name: 'Votre laboratoire',
-      price: 95, // % par rapport à la moyenne
-      margin: 110, // % par rapport à la moyenne
-      rotation: 105, // % par rapport à la moyenne
-      stock: 95, // % par rapport à la moyenne
-      sales: 112 // % par rapport à la moyenne
+      price: 95,
+      margin: 110,
+      rotation: 105,
+      stock: 95,
+      sales: 112
     },
     {
       name: 'Moyenne du groupement',
-      price: 100, // Référence 100%
+      price: 100,
       margin: 100,
       rotation: 100,
       stock: 100,
@@ -139,6 +152,44 @@ export function LabComparisonChart({
     setSelectedPharmacy(labName);
   };
 
+  // S'assurer que nous avons au moins un laboratoire pour les données produits
+  const primaryLab = laboratories[0];
+
+  // Définir les onglets
+  const tabs: TabItem[] = [
+    {
+      id: 'radar',
+      label: 'Radar de performance',
+      content: (
+        <>
+          <PharmacyMetricsCards pharmacy={selectedLabData} metricDetails={metricDetails} />
+          
+          <div className="mt-6">
+            <RadarChartView 
+              data={comparisonData} 
+              onPharmacySelect={handleLabSelect}
+              selectedPharmacy={selectedPharmacy}
+            />
+            
+            <div className="mt-2 text-xs text-center text-gray-500 dark:text-gray-400">
+              <span>Cliquez sur les éléments de la légende pour comparer les données</span>
+            </div>
+          </div>
+        </>
+      )
+    },
+    {
+      id: 'products',
+      label: 'Top produits vs Groupement',
+      content: (
+        <TopProductsComparisonCards 
+          laboratory={primaryLab} 
+          allProducts={allProducts} 
+        />
+      )
+    }
+  ];
+
   return (
     <Card className="mt-6">
       <div className="p-6">
@@ -158,21 +209,7 @@ export function LabComparisonChart({
           </p>
         </div>
         
-        {/* Afficher les métriques du laboratoire sélectionné */}
-        <PharmacyMetricsCards pharmacy={selectedLabData} metricDetails={metricDetails} />
-        
-        {/* Afficher le graphique radar */}
-        <div className="mt-6">
-          <RadarChartView 
-            data={comparisonData} 
-            onPharmacySelect={handleLabSelect}
-            selectedPharmacy={selectedPharmacy}
-          />
-          
-          <div className="mt-2 text-xs text-center text-gray-500 dark:text-gray-400">
-            <span>Cliquez sur les éléments de la légende pour comparer les données</span>
-          </div>
-        </div>
+        <Tabs tabs={tabs} defaultTab="radar" />
       </div>
     </Card>
   );
