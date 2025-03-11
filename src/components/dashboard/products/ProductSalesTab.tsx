@@ -1,8 +1,9 @@
 // src/components/dashboard/products/ProductSalesTab.tsx
 import React from 'react';
-import { Product } from '@/types/product';
+import { SummaryMetricCard } from '../metrics/SummaryMetricCard';
+import { Product } from './ProductResultTable';
 import { ProductSalesChart } from './ProductSalesChart';
-import { SummaryMetricCard } from '@/components/dashboard/metrics/SummaryMetricCard';
+
 
 interface ProductSalesTabProps {
   product: Product;
