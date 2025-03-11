@@ -1,10 +1,10 @@
-// src/components/layout/MobileMenu.tsx (version améliorée)
+// src/components/layout/MobileMenu.tsx
 'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import { DateRangeSelector } from '@/components/shared/DateRangeSelector';
+import { EnhancedDateRangeSelector } from '@/components/shared/EnhancedDateRangeSelector';
 import { AdvancedPharmacySelector } from '@/components/shared/AdvancedPharmacySelector';
 
 interface MobileMenuProps {
@@ -45,7 +45,7 @@ export function MobileMenu({
             {/* Date selector in mobile menu */}
             {showDateSelector && (
               <div className="py-2">
-                <DateRangeSelector />
+                <EnhancedDateRangeSelector />
               </div>
             )}
             

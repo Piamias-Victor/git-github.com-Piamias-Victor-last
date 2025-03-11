@@ -8,7 +8,12 @@ const defaultContext: DateRangeContextType = {
   startDate: '',
   endDate: '',
   displayLabel: 'Ce mois',
-  setDateRange: () => {}
+  comparisonRange: 'previousYear',
+  comparisonStartDate: '',
+  comparisonEndDate: '',
+  comparisonDisplayLabel: 'N-1',
+  setDateRange: () => {},
+  setComparisonDateRange: () => {}
 };
 
 // Création du contexte

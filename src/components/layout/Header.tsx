@@ -1,4 +1,4 @@
-// src/components/layout/Header.tsx (version améliorée)
+// src/components/layout/Header.tsx
 'use client';
 
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { FiMenu } from "react-icons/fi";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { DateRangeSelector } from "@/components/shared/DateRangeSelector";
+import { EnhancedDateRangeSelector } from "@/components/shared/EnhancedDateRangeSelector";
 import { AdvancedPharmacySelector } from "@/components/shared/AdvancedPharmacySelector";
 import { NavLinks } from "./NavLinks";
 import { AuthButtons } from "./AuthButtons";
@@ -53,12 +53,12 @@ export function Header() {
           {/* Navigation links - desktop */}
           <NavLinks isAuthenticated={isAuthenticated} />
           
-          {/* Date selector and Pharmacy selector and auth buttons */}
+          {/* Sélecteurs et auth buttons */}
           <div className="flex items-center gap-3">
             {/* Sélecteurs (uniquement sur les pages de dashboard) */}
             {showSelectors && (
               <div className="hidden md:flex items-center space-x-2">
-                <DateRangeSelector />
+                <EnhancedDateRangeSelector />
                 <AdvancedPharmacySelector 
                   selectedPharmacies={selectedPharmacies}
                   onPharmacyChange={setPharmacies}

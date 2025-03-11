@@ -1,3 +1,4 @@
+// src/utils/dateUtils.ts
 /**
  * Utilitaires pour la gestion des dates et périodes
  */
@@ -9,7 +10,7 @@ export function getDateRangeFromPreset(preset: string): { startDate: string, end
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   
-  const endDate = new Date(today);
+  let endDate = new Date(today);
   let startDate = new Date(today);
   
   switch (preset) {
@@ -41,6 +42,11 @@ export function getDateRangeFromPreset(preset: string): { startDate: string, end
     case 'thisYear':
       startDate = new Date(today.getFullYear(), 0, 1);
       break;
+
+    case 'lastMonth':
+      startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+      endDate = new Date(today.getFullYear(), today.getMonth(), 0);
+      break;
       
     default:
       // Pour 'custom' ou autres, on retourne les dates actuelles
@@ -50,6 +56,75 @@ export function getDateRangeFromPreset(preset: string): { startDate: string, end
   return {
     startDate: formatDateForAPI(startDate),
     endDate: formatDateForAPI(endDate)
+  };
+}
+
+/**
+ * Obtient les dates de début et de fin pour la période de comparaison
+ * en fonction de la période principale et du type de comparaison
+ */
+export function getComparisonDateRange(
+  comparisonType: string,
+  primaryStartDate: string,
+  primaryEndDate: string
+): { startDate: string, endDate: string, label: string } {
+  if (!primaryStartDate || !primaryEndDate) {
+    return { startDate: '', endDate: '', label: 'N/A' };
+  }
+
+  const primaryStart = new Date(primaryStartDate);
+  const primaryEnd = new Date(primaryEndDate);
+  
+  // Calculer la durée de la période principale en jours
+  const primaryDuration = Math.round((primaryEnd.getTime() - primaryStart.getTime()) / (1000 * 3600 * 24));
+  
+  let comparisonStart = new Date(primaryStart);
+  let comparisonEnd = new Date(primaryEnd);
+  let label = '';
+  
+  switch (comparisonType) {
+    case 'previousYear':
+      // Calcul de la même période mais l'année précédente
+      comparisonStart.setFullYear(primaryStart.getFullYear() - 1);
+      comparisonEnd.setFullYear(primaryEnd.getFullYear() - 1);
+      label = 'N-1';
+      break;
+      
+    case 'previousPeriod':
+      // Période précédente de même durée
+      comparisonEnd = new Date(primaryStart);
+      comparisonEnd.setDate(comparisonEnd.getDate() - 1); // Jour précédent le début de la période principale
+      comparisonStart = new Date(comparisonEnd);
+      comparisonStart.setDate(comparisonStart.getDate() - primaryDuration); // Remonte de la durée de la période principale
+      label = 'Période précédente';
+      break;
+      
+    case 'sameLastYear':
+      // Même période l'année dernière
+      comparisonStart.setFullYear(primaryStart.getFullYear() - 1);
+      comparisonEnd.setFullYear(primaryEnd.getFullYear() - 1);
+      label = 'Même période N-1';
+      break;
+      
+    case 'sameLastTwoYears':
+      // Même période il y a deux ans
+      comparisonStart.setFullYear(primaryStart.getFullYear() - 2);
+      comparisonEnd.setFullYear(primaryEnd.getFullYear() - 2);
+      label = 'Même période N-2';
+      break;
+      
+    default:
+      // Par défaut, on utilise l'année précédente
+      comparisonStart.setFullYear(primaryStart.getFullYear() - 1);
+      comparisonEnd.setFullYear(primaryEnd.getFullYear() - 1);
+      label = 'N-1';
+      break;
+  }
+  
+  return {
+    startDate: formatDateForAPI(comparisonStart),
+    endDate: formatDateForAPI(comparisonEnd),
+    label
   };
 }
 
