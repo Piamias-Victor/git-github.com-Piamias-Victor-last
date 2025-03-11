@@ -8,7 +8,7 @@ export interface Product {
   ean: string;
   name: string;
   laboratory: string;
-  category: string;
+  category: string;  // Gardé dans l'interface mais n'est plus affiché dans le tableau principal
   stock: number;
   price: string;
   margin: string;
@@ -22,7 +22,7 @@ interface ProductResultTableProps {
 
 /**
  * Composant d'affichage des résultats de recherche produit
- * Version mise à jour avec des colonnes supplémentaires basées sur le schéma DB
+ * Mise à jour pour retirer la colonne Catégorie et utiliser des lignes expansibles
  */
 export function ProductResultTable({ products }: ProductResultTableProps) {
   const [viewMode, setViewMode] = useState<'unit' | 'global'>('unit');

@@ -6,6 +6,7 @@ interface ProductTableHeaderProps {
 
 /**
  * Composant pour l'en-tête du tableau de résultats de produits
+ * Sans la colonne catégorie
  */
 export function ProductTableHeader({ viewMode }: ProductTableHeaderProps) {
   return (
@@ -19,9 +20,6 @@ export function ProductTableHeader({ viewMode }: ProductTableHeaderProps) {
         </th>
         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
           Laboratoire
-        </th>
-        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-          Catégorie
         </th>
         <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
           Stock
@@ -39,7 +37,7 @@ export function ProductTableHeader({ viewMode }: ProductTableHeaderProps) {
           Ventes
         </th>
         <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-          Actions
+          Détails
         </th>
       </tr>
     </thead>
