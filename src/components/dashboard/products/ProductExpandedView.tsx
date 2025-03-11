@@ -1,11 +1,12 @@
-// src/components/dashboard/products/ProductExpandedView.tsx
+// Modification à apporter à src/components/dashboard/products/ProductExpandedView.tsx
 import React from 'react';
-import { FiTrendingUp, FiPackage, FiBarChart2, FiInfo } from 'react-icons/fi';
+import { FiTrendingUp, FiPackage, FiBarChart2, FiInfo, FiGlobe } from 'react-icons/fi';
 import { Product } from './ProductResultTable';
 import { ProductDetailsTab } from './ProductDetailsTab';
 import { ProductSalesTab } from './ProductSalesTab';
 import { ProductStockTab } from './ProductStockTab';
 import { ProductOrdersTab } from './ProductOrdersTab';
+import { PharmacyComparisonChart } from './comparison/PharmacyComparisonChart'; // Importer le nouveau composant
 import { Tabs, TabItem } from '@/components/ui/Tabs';
 import { Card } from '@/components/ui/Card';
 
@@ -50,6 +51,16 @@ export function ProductExpandedView({ product }: ProductExpandedViewProps) {
         </div>
       ),
       content: <ProductOrdersTab product={product} />
+    },
+    // Ajouter un nouvel onglet pour la comparaison entre pharmacies
+    {
+      id: 'comparison',
+      label: (
+        <div className="flex items-center">
+          <FiGlobe className="mr-2" size={16} /> Moyenne groupement
+        </div>
+      ),
+      content: <PharmacyComparisonChart productId={product.id} productCode={product.ean} />
     }
   ];
 
