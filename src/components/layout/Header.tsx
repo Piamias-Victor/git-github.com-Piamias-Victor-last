@@ -1,3 +1,4 @@
+// src/components/layout/Header.tsx (version améliorée)
 'use client';
 
 import Link from "next/link";
@@ -6,9 +7,11 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { DateRangeSelector } from "@/components/shared/DateRangeSelector";
+import { AdvancedPharmacySelector } from "@/components/shared/AdvancedPharmacySelector";
 import { NavLinks } from "./NavLinks";
 import { AuthButtons } from "./AuthButtons";
 import { MobileMenu } from "./MobileMenu";
+import { usePharmacySelection } from "@/providers/PharmacyProvider";
 
 /**
  * Header Component
@@ -20,14 +23,15 @@ export function Header() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { selectedPharmacies, setPharmacies } = usePharmacySelection();
 
   // Ne pas afficher le header sur les pages d'authentification
   if (pathname?.startsWith('/auth/')) {
     return null;
   }
 
-  // Vérifier si on est sur le dashboard ou une page qui nécessite la sélection de dates
-  const showDateSelector = pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin');
+  // Vérifier si on est sur le dashboard ou une page qui nécessite la sélection de dates/pharmacies
+  const showSelectors = pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin');
   const isAuthenticated = status === 'authenticated';
 
   return (
@@ -49,12 +53,16 @@ export function Header() {
           {/* Navigation links - desktop */}
           <NavLinks isAuthenticated={isAuthenticated} />
           
-          {/* Date selector and auth buttons */}
+          {/* Date selector and Pharmacy selector and auth buttons */}
           <div className="flex items-center gap-3">
-            {/* Sélecteur de dates (uniquement sur les pages de dashboard) */}
-            {showDateSelector && (
-              <div className="hidden md:block">
+            {/* Sélecteurs (uniquement sur les pages de dashboard) */}
+            {showSelectors && (
+              <div className="hidden md:flex items-center space-x-2">
                 <DateRangeSelector />
+                <AdvancedPharmacySelector 
+                  selectedPharmacies={selectedPharmacies}
+                  onPharmacyChange={setPharmacies}
+                />
               </div>
             )}
             
@@ -77,7 +85,10 @@ export function Header() {
         <MobileMenu 
           isOpen={mobileMenuOpen}
           isAuthenticated={isAuthenticated}
-          showDateSelector={showDateSelector}
+          showDateSelector={showSelectors}
+          showPharmacySelector={showSelectors}
+          selectedPharmacies={selectedPharmacies}
+          onPharmacyChange={setPharmacies}
         />
       </div>
     </header>

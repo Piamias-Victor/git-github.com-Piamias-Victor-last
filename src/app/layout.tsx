@@ -1,3 +1,4 @@
+// src/app/layout.tsx (version modifiée)
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -5,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { DateRangeProvider } from "@/providers/DateRangeProvider";
+import { PharmacyProvider } from "@/providers/PharmacyProvider";
 
 // Load fonts
 const geistSans = Geist({
@@ -40,14 +42,16 @@ export default function RootLayout({
       >
         <AuthProvider>
           <DateRangeProvider>
-            {/* Global header */}
-            <Header />
-            
-            {/* Main content */}
-            {children}
+            <PharmacyProvider>
+              {/* Global header */}
+              <Header />
+              
+              {/* Main content */}
+              {children}
 
-            {/* Global footer */}
-            <Footer />
+              {/* Global footer */}
+              <Footer />
+            </PharmacyProvider>
           </DateRangeProvider>
         </AuthProvider>
       </body>

@@ -93,7 +93,7 @@ export function SummaryCard({
 
   // Fonction pour naviguer vers la liste filtrée
   const handleClick = () => {
-    if (value > 0) {
+    if (value > 0  && onShowDetails) {
       if (onShowDetails) {
         // Dans ce cas, on affiche dans une modal ou une section dédiée
         onShowDetails();
@@ -108,7 +108,7 @@ export function SummaryCard({
 
   return (
     <div 
-      className={`flex items-center justify-between p-3 ${bgColors[colorScheme]} rounded-lg ${value > 0 ? 'cursor-pointer hover:opacity-90 transition-opacity' : 'opacity-70'}`}
+      className={`flex items-center justify-between p-3 ${bgColors[colorScheme]} rounded-lg ${value > 0 && onShowDetails ? 'cursor-pointer hover:opacity-90 transition-opacity' : 'opacity-70'}`}
       onClick={handleClick}
     >
       <div className="flex items-center">

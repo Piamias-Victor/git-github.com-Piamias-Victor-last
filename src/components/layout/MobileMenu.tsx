@@ -1,20 +1,32 @@
+// src/components/layout/MobileMenu.tsx (version améliorée)
 'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { DateRangeSelector } from '@/components/shared/DateRangeSelector';
+import { AdvancedPharmacySelector } from '@/components/shared/AdvancedPharmacySelector';
 
 interface MobileMenuProps {
   isOpen: boolean;
   isAuthenticated: boolean;
   showDateSelector: boolean;
+  showPharmacySelector: boolean;
+  selectedPharmacies: string[];
+  onPharmacyChange: (pharmacyIds: string[]) => void;
 }
 
 /**
  * Composant pour le menu mobile
  */
-export function MobileMenu({ isOpen, isAuthenticated, showDateSelector }: MobileMenuProps) {
+export function MobileMenu({ 
+  isOpen, 
+  isAuthenticated, 
+  showDateSelector,
+  showPharmacySelector,
+  selectedPharmacies,
+  onPharmacyChange 
+}: MobileMenuProps) {
   if (!isOpen) return null;
 
   return (
@@ -34,6 +46,16 @@ export function MobileMenu({ isOpen, isAuthenticated, showDateSelector }: Mobile
             {showDateSelector && (
               <div className="py-2">
                 <DateRangeSelector />
+              </div>
+            )}
+            
+            {/* Pharmacy selector in mobile menu */}
+            {showPharmacySelector && (
+              <div className="py-2">
+                <AdvancedPharmacySelector 
+                  selectedPharmacies={selectedPharmacies}
+                  onPharmacyChange={onPharmacyChange}
+                />
               </div>
             )}
             
