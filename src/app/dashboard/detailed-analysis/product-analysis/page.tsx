@@ -1,17 +1,18 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import Link from 'next/link';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiFilter } from 'react-icons/fi';
 import { ProductResultTable, Product } from '@/components/dashboard/products/ProductResultTable';
 import { ProductSearchStats } from '@/components/dashboard/products/ProductSearchStats';
 import { SearchHelp } from '@/components/dashboard/analysis/SearchHelp';
 import { createUrlWithCurrentDateParams } from '@/utils/navigationUtils';
 import { ProductSearch } from '@/components/dashboard/products/ProductSearch';
 import { ProductsAggregateCharts } from '@/components/dashboard/products/ProductsAggregateCharts';
+import { filterProducts } from '@/utils/filterUtils';
 
 // Données de test pour démonstration
 const mockProductData: Product[] = [
@@ -98,7 +99,43 @@ const mockProductData: Product[] = [
     margin: '1.52',
     marginRate: '31.3%',
     sales: 28
-  }
+  },
+  {
+    id: '8',
+    ean: '3400938101379',
+    name: 'Magné B6 Boîte de 60 comprimés',
+    laboratory: 'Sanofi',
+    category: 'Compléments alimentaires',
+    stock: 4,
+    price: '9.75',
+    margin: '3.12',
+    marginRate: '32.0%',
+    sales: 18
+  },
+  {
+    id: '9',
+    ean: '3400930085745',
+    name: 'Daflon 500mg Boîte de 30 comprimés',
+    laboratory: 'Servier',
+    category: 'Circulation',
+    stock: 2,
+    price: '10.95',
+    margin: '-0.50',
+    marginRate: '-4.6%',
+    sales: 49
+  },
+  {
+    id: '10',
+    ean: '3400937025423',
+    name: 'Nurofen 400mg Boîte de 12 capsules',
+    laboratory: 'Reckitt Benckiser',
+    category: 'Anti-inflammatoires',
+    stock: 67,
+    price: '4.25',
+    margin: '1.05',
+    marginRate: '24.7%',
+    sales: 15
+  },
 ];
 
 /**
@@ -107,7 +144,65 @@ const mockProductData: Product[] = [
 export default function ProductAnalysisPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [filteredResults, setFilteredResults] = useState<Product[]>([]);
+  const [activeFilter, setActiveFilter] = useState<{type: string, value: string} | null>(null);
+  const [filterTitle, setFilterTitle] = useState<string>('');
+
+  // Récupérer les filtres depuis l'URL
+  useEffect(() => {
+    const filterType = searchParams?.get('filter');
+    const filterValue = searchParams?.get('value');
+    
+    if (filterType && filterValue) {
+      setActiveFilter({ type: filterType, value: filterValue });
+      
+      // Définir le titre du filtre
+      let title = 'Produits filtrés';
+      switch (filterType) {
+        case 'stock':
+          switch (filterValue) {
+            case 'critical': title = 'Produits en stock critique'; break;
+            case 'watch': title = 'Produits à surveiller'; break;
+            case 'optimal': title = 'Produits avec stock optimal'; break;
+            case 'over': title = 'Produits en surstock'; break;
+          }
+          break;
+        case 'margin':
+          switch (filterValue) {
+            case 'negative': title = 'Produits à marge négative'; break;
+            case 'low': title = 'Produits à faible marge'; break;
+            case 'good': title = 'Produits à bonne marge'; break;
+            case 'excellent': title = 'Produits à excellente marge'; break;
+          }
+          break;
+        case 'trend':
+          switch (filterValue) {
+            case 'high-decline': title = 'Produits en forte baisse'; break;
+            case 'low-decline': title = 'Produits en légère baisse'; break;
+            case 'stable': title = 'Produits stables'; break;
+            case 'low-growth': title = 'Produits en légère hausse'; break;
+            case 'high-growth': title = 'Produits en forte hausse'; break;
+          }
+          break;
+      }
+      setFilterTitle(title);
+      
+      // Appliquer automatiquement la recherche avec filtre
+      setSearchResults(mockProductData);
+    }
+  }, [searchParams]);
+
+  // Appliquer le filtre lorsque les résultats de recherche ou le filtre actif changent
+  useEffect(() => {
+    if (searchResults.length > 0 && activeFilter) {
+      const filtered = filterProducts(searchResults, activeFilter.type, activeFilter.value);
+      setFilteredResults(filtered);
+    } else {
+      setFilteredResults(searchResults);
+    }
+  }, [searchResults, activeFilter]);
 
   // Redirection si non authentifié
   useEffect(() => {
@@ -121,6 +216,18 @@ export default function ProductAnalysisPage() {
     // Si l'utilisateur a fait une vraie recherche, on pourrait filtrer nos données de test
     // En production, cela serait remplacé par un appel API réel
     setSearchResults(mockProductData);
+  };
+
+  // Effacer le filtre actif
+  const clearFilter = () => {
+    setActiveFilter(null);
+    setFilterTitle('');
+    setFilteredResults(searchResults);
+    
+    // Mettre à jour l'URL sans les paramètres de filtre
+    const baseUrl = window.location.pathname;
+    const url = createUrlWithCurrentDateParams(baseUrl);
+    router.push(url);
   };
 
   // Afficher un état de chargement si la session est en cours de chargement
@@ -150,23 +257,47 @@ export default function ProductAnalysisPage() {
         </div>
         
         <DashboardHeader 
-          title="Analyse par Produit"
-          subtitle="Recherchez et analysez les données spécifiques par produit"
+          title={activeFilter ? filterTitle : "Analyse par Produit"}
+          subtitle={activeFilter 
+            ? `${filteredResults.length} produits correspondants à votre filtre`
+            : "Recherchez et analysez les données spécifiques par produit"
+          }
         />
         
+        {/* Filtre actif */}
+        {activeFilter && (
+          <div className="mb-6 bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
+                <FiFilter className="text-indigo-600 dark:text-indigo-400 mr-2" />
+                <span className="text-indigo-700 dark:text-indigo-300">
+                  Filtre actif: {filterTitle}
+                </span>
+              </div>
+              <button 
+                onClick={clearFilter}
+                className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+              >
+                Effacer le filtre
+              </button>
+            </div>
+          </div>
+        )}
+        
         {/* Guide d'aide à la recherche */}
-        <SearchHelp />
+        {!activeFilter && <SearchHelp />}
         
         {/* Formulaire de recherche */}
-        <ProductSearch onSearch={handleSearch} />
+        {!activeFilter && <ProductSearch onSearch={handleSearch} />}
         
         {/* Statistiques des résultats */}
-        {searchResults.length > 0 && <ProductSearchStats products={searchResults} />}
-
-        {searchResults.length > 0 && <ProductsAggregateCharts products={searchResults} />}
+        {filteredResults.length > 0 && <ProductSearchStats products={filteredResults} />}
+        
+        {/* Graphiques agrégés */}
+        {filteredResults.length > 0 && <ProductsAggregateCharts products={filteredResults} />}
         
         {/* Tableau des résultats */}
-        <ProductResultTable products={searchResults} />
+        <ProductResultTable products={filteredResults} />
       </div>
     </div>
   );

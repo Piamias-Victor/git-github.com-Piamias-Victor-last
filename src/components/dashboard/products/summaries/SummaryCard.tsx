@@ -1,5 +1,6 @@
 // src/components/dashboard/products/summaries/SummaryCard.tsx
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   FiAlertTriangle, 
   FiAlertCircle, 
@@ -12,8 +13,10 @@ import {
   FiBarChart2,
   FiChevronRight,
   FiChevronLeft,
-  FiGrid
+  FiGrid,
+  FiExternalLink
 } from 'react-icons/fi';
+import { useUrlWithDateParams } from '@/utils/navigationUtils';
 
 type ColorScheme = 'red' | 'amber' | 'emerald' | 'green' | 'blue';
 type IconType = 'alert' | 'alert-circle' | 'check-circle' | 'inbox' | 
@@ -26,9 +29,24 @@ interface SummaryCardProps {
   value: number;
   icon: IconType;
   colorScheme: ColorScheme;
+  filterType: string;
+  filterValue: string;
+  onShowDetails?: () => void;
 }
 
-export function SummaryCard({ title, description, value, icon, colorScheme }: SummaryCardProps) {
+export function SummaryCard({ 
+  title, 
+  description, 
+  value, 
+  icon, 
+  colorScheme,
+  filterType,
+  filterValue,
+  onShowDetails
+}: SummaryCardProps) {
+  const router = useRouter();
+  const { getUrl } = useUrlWithDateParams();
+  
   // Couleurs de fond et texte par schéma de couleur
   const bgColors = {
     red: 'bg-red-50 dark:bg-red-900/20',
@@ -73,8 +91,26 @@ export function SummaryCard({ title, description, value, icon, colorScheme }: Su
     }
   };
 
+  // Fonction pour naviguer vers la liste filtrée
+  const handleClick = () => {
+    if (value > 0) {
+      if (onShowDetails) {
+        // Dans ce cas, on affiche dans une modal ou une section dédiée
+        onShowDetails();
+      } else {
+        // Sinon, on redirige vers la page d'analyse produit avec les filtres
+        const filterParams = `filter=${filterType}&value=${filterValue}`;
+        const url = getUrl(`/dashboard/detailed-analysis/product-analysis?${filterParams}`);
+        router.push(url);
+      }
+    }
+  };
+
   return (
-    <div className={`flex items-center justify-between p-3 ${bgColors[colorScheme]} rounded-lg`}>
+    <div 
+      className={`flex items-center justify-between p-3 ${bgColors[colorScheme]} rounded-lg ${value > 0 ? 'cursor-pointer hover:opacity-90 transition-opacity' : 'opacity-70'}`}
+      onClick={handleClick}
+    >
       <div className="flex items-center">
         <div className={`w-8 h-8 flex items-center justify-center ${iconBgColors[colorScheme]} ${textColors[colorScheme]} rounded-full mr-3`}>
           {getIcon()}
@@ -84,8 +120,13 @@ export function SummaryCard({ title, description, value, icon, colorScheme }: Su
           <div className="text-xs text-gray-500 dark:text-gray-400">{description}</div>
         </div>
       </div>
-      <div className={`text-xl font-bold ${textColors[colorScheme]}`}>
-        {value}
+      <div className="flex items-center">
+        <div className={`text-xl font-bold ${textColors[colorScheme]}`}>
+          {value}
+        </div>
+        {value > 0 && (
+          <FiExternalLink className={`ml-1.5 ${textColors[colorScheme]}`} size={16} />
+        )}
       </div>
     </div>
   );
