@@ -103,30 +103,30 @@ export function AdvancedPharmacySelector({ selectedPharmacies, onPharmacyChange 
   };
 
   // Appliquer un filtre de région
-  const applyRegionFilter = (region: string) => {
+const applyRegionFilter = (region: string) => {
     const pharmaciesInRegion = pharmacies.filter(p => p.region === region).map(p => p.id);
     onPharmacyChange(pharmaciesInRegion);
     setLastFilterType('region');
     setSelectedFilter(region);
-    setIsOpen(false);
+    // Ne pas fermer le dropdown
   };
-
+  
   // Appliquer un filtre de CA
   const applyRevenueFilter = (revenue: string) => {
     const pharmaciesWithRevenue = pharmacies.filter(p => p.revenue === revenue).map(p => p.id);
     onPharmacyChange(pharmaciesWithRevenue);
     setLastFilterType('revenue');
     setSelectedFilter(revenue);
-    setIsOpen(false);
+    // Ne pas fermer le dropdown
   };
-
+  
   // Appliquer un filtre de taille
   const applySizeFilter = (size: string) => {
     const pharmaciesWithSize = pharmacies.filter(p => p.size === size).map(p => p.id);
     onPharmacyChange(pharmaciesWithSize);
     setLastFilterType('size');
     setSelectedFilter(size);
-    setIsOpen(false);
+    // Ne pas fermer le dropdown
   };
 
   // Formater le texte d'affichage du bouton
@@ -177,7 +177,7 @@ export function AdvancedPharmacySelector({ selectedPharmacies, onPharmacyChange 
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 max-h-[70vh] overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 border border-gray-200 dark:border-gray-700 flex flex-col">
+        <div className="absolute right-0 mt-2 w-96 max-h-[70vh] overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 border border-gray-200 dark:border-gray-700 flex flex-col">
           {/* Tabs */}
           <div className="flex border-b border-gray-200 dark:border-gray-700">
             <button
