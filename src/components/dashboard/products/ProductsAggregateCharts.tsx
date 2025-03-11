@@ -139,9 +139,13 @@ function generateMockStockData(products: Product[]): any[] {
   // Facteurs pour ajouter des variations saisonnières
   const seasonalEffect = [1.1, 1.0, 0.9, 1.0, 1.1, 1.2]; // Effet inverse pour les stocks
   
+  // Périodes de forte demande (pour simuler plus de ruptures de stock)
+  const highDemandMonths = [0, 5]; // Janvier et Juin (indices 0 et 5)
+  
   // Pour chaque mois dans la période
   for (let i = 0; i < 6; i++) {
     const monthDate = new Date(currentDate);
+    const monthIndex = currentDate.getMonth();
     
     // Stock total agrégé pour ce mois
     const totalStock = products.reduce((sum, product) => {
@@ -154,10 +158,33 @@ function generateMockStockData(products: Product[]): any[] {
       return sum + (parseFloat(product.price) * monthStock);
     }, 0);
     
+    // Calculer le nombre de produits en rupture (simulé)
+    // Plus de ruptures pendant les mois de forte demande
+    const isHighDemandSeason = highDemandMonths.includes(monthIndex);
+    
+    // Compter les produits en stock critique (<= 5) comme potentiellement en rupture
+    const criticalStockCount = products.filter(p => p.stock <= 5).length;
+    
+    // Ajuster en fonction de la saison et du hasard
+    const baseStockoutRate = isHighDemandSeason ? 0.7 : 0.3; // 70% ou 30% des produits critiques
+    let stockouts = Math.floor(criticalStockCount * baseStockoutRate * (0.8 + Math.random() * 0.4));
+    
+    // S'assurer d'avoir une valeur minimale pour les mois de forte demande
+    if (isHighDemandSeason && stockouts < 2) {
+      stockouts = 2 + Math.floor(Math.random() * 3); // Au moins 2-4 ruptures
+    }
+    
+    // S'assurer que la tendance générale montre une amélioration dans les derniers mois
+    // (moins de ruptures à mesure qu'on se rapproche du présent)
+    if (i >= 4) { // Pour les 2 derniers mois
+      stockouts = Math.max(0, stockouts - (i - 3) * 2); // Réduire progressivement
+    }
+    
     monthlyData.push({
       date: monthDate.toISOString().split('T')[0],
       stock: totalStock,
-      stockValue: Math.round(totalStockValue * 100) / 100
+      stockValue: Math.round(totalStockValue * 100) / 100,
+      stockouts: stockouts
     });
     
     currentDate.setMonth(currentDate.getMonth() + 1);
