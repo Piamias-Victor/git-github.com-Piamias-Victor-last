@@ -537,7 +537,10 @@ export default function LabAnalysisPage() {
         )}
 
         {searchResults.length > 0 && (
-          <LabComparisonChart laboratories={searchResults} />
+          <LabComparisonChart 
+            laboratories={searchResults} 
+            allProducts={mockProductData} 
+          />
         )}
         
         {/* Tableau des résultats */}
