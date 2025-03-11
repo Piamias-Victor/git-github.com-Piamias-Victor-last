@@ -40,7 +40,12 @@ export function ProductTableRow({ product, viewMode }: ProductTableRowProps) {
           <span className="font-mono text-gray-500 dark:text-gray-400">{product.ean}</span>
         </TableCell>
         <TableCell>
-          <span className="font-medium text-gray-900 dark:text-white">{product.name}</span>
+          {/* Ajout de la classe max-w-xs et truncate pour limiter la largeur et tronquer le texte */}
+          <div className="max-w-xs truncate">
+            <span className="font-medium text-gray-900 dark:text-white" title={product.name}>
+              {product.name}
+            </span>
+          </div>
         </TableCell>
         <TableCell>
           <span className="text-gray-500 dark:text-gray-300">{product.laboratory}</span>
