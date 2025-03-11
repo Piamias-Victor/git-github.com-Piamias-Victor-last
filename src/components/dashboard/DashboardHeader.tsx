@@ -1,3 +1,4 @@
+// src/components/dashboard/DashboardHeader.tsx
 'use client';
 
 import React, { Suspense } from 'react';
@@ -9,10 +10,15 @@ interface DashboardHeaderProps {
   showDateRange?: boolean;
 }
 
+// Composant de fallback pour le DateRange
+const DateRangeSkeleton = () => (
+  <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+);
+
 // Séparez la partie qui pourrait utiliser useSearchParams
 function DateRangeWrapper() {
   return (
-    <Suspense fallback={<div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>}>
+    <Suspense fallback={<DateRangeSkeleton />}>
       <CurrentDateRange />
     </Suspense>
   );
