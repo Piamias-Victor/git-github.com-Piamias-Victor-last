@@ -1,11 +1,11 @@
 // src/components/dashboard/metrics/SummaryMetricCard.tsx
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface SummaryMetricCardProps {
   label: string;
   value: string;
   valueColor?: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 }
 
 /**

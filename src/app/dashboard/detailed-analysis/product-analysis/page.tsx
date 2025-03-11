@@ -14,6 +14,7 @@ import { ProductSearch } from '@/components/dashboard/products/ProductSearch';
 import { ProductsAggregateCharts } from '@/components/dashboard/products/ProductsAggregateCharts';
 import { GlobalComparisonChart } from '@/components/dashboard/products/comparison/GlobalComparisonChart';
 import { filterProducts } from '@/utils/filterUtils';
+import { SalesDistributionSection } from '@/components/dashboard/products/distribution/SalesDistributionSection';
 
 // Données de test pour démonstration
 const mockProductData: Product[] = [
@@ -312,6 +313,12 @@ export default function ProductAnalysisPage() {
         {showComparison && filteredResults.length > 0 && (
           <GlobalComparisonChart products={filteredResults} />
         )}
+
+        {/* Ajouter la section de répartition des ventes si nous avons des résultats */}
+        {filteredResults.length === 1 && (
+          <SalesDistributionSection product={filteredResults[0]} />
+        )}
+
         
         {/* Tableau des résultats */}
         <ProductResultTable products={filteredResults} />

@@ -1,6 +1,6 @@
 // Modification à apporter à src/components/dashboard/products/ProductExpandedView.tsx
 import React from 'react';
-import { FiTrendingUp, FiPackage, FiBarChart2, FiInfo, FiGlobe } from 'react-icons/fi';
+import { FiTrendingUp, FiPackage, FiBarChart2, FiInfo, FiGlobe, FiPieChart } from 'react-icons/fi';
 import { Product } from './ProductResultTable';
 import { ProductDetailsTab } from './ProductDetailsTab';
 import { ProductSalesTab } from './ProductSalesTab';
@@ -9,6 +9,7 @@ import { ProductOrdersTab } from './ProductOrdersTab';
 import { PharmacyComparisonChart } from './comparison/PharmacyComparisonChart'; // Importer le nouveau composant
 import { Tabs, TabItem } from '@/components/ui/Tabs';
 import { Card } from '@/components/ui/Card';
+import { SalesDistributionSection } from './distribution/SalesDistributionSection';
 
 interface ProductExpandedViewProps {
   product: Product;
@@ -61,6 +62,15 @@ export function ProductExpandedView({ product }: ProductExpandedViewProps) {
         </div>
       ),
       content: <PharmacyComparisonChart productId={product.id} productCode={product.ean} />
+    },
+    {
+      id: 'distribution',
+      label: (
+        <div className="flex items-center">
+          <FiPieChart className="mr-2" size={16} /> Répartition
+        </div>
+      ),
+      content: <SalesDistributionSection product={product} />
     }
   ];
 
