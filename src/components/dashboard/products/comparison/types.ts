@@ -8,4 +8,13 @@ export interface PharmacyRadarData {
     rotation: number; // % par rapport à la moyenne
     stock: number; // % par rapport à la moyenne
     sales: number; // % par rapport à la moyenne
-  }
+}
+
+// Interface pour les données détaillées des métriques
+export interface MetricDetailData {
+    yourValue: number;   // Valeur pour votre pharmacie
+    percentage: number;  // Pourcentage par rapport à la moyenne (100% = moyenne)
+    groupAvg: number;    // Valeur moyenne du groupement
+    groupMax: number;    // Valeur maximale dans le groupement
+    groupMin: number;    // Valeur minimale dans le groupement
+}

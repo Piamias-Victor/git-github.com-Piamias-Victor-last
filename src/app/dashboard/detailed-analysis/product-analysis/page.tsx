@@ -12,6 +12,7 @@ import { SearchHelp } from '@/components/dashboard/analysis/SearchHelp';
 import { createUrlWithCurrentDateParams } from '@/utils/navigationUtils';
 import { ProductSearch } from '@/components/dashboard/products/ProductSearch';
 import { ProductsAggregateCharts } from '@/components/dashboard/products/ProductsAggregateCharts';
+import { GlobalComparisonChart } from '@/components/dashboard/products/comparison/GlobalComparisonChart';
 import { filterProducts } from '@/utils/filterUtils';
 
 // Données de test pour démonstration
@@ -149,6 +150,7 @@ export default function ProductAnalysisPage() {
   const [filteredResults, setFilteredResults] = useState<Product[]>([]);
   const [activeFilter, setActiveFilter] = useState<{type: string, value: string} | null>(null);
   const [filterTitle, setFilterTitle] = useState<string>('');
+  const [showComparison, setShowComparison] = useState<boolean>(false);
 
   // Récupérer les filtres depuis l'URL
   useEffect(() => {
@@ -203,6 +205,16 @@ export default function ProductAnalysisPage() {
       setFilteredResults(searchResults);
     }
   }, [searchResults, activeFilter]);
+
+  // Activer la comparaison lorsque nous avons des résultats
+  useEffect(() => {
+    if (filteredResults.length > 0) {
+      // On pourrait définir un seuil minimum pour afficher la comparaison
+      setShowComparison(filteredResults.length >= 3);
+    } else {
+      setShowComparison(false);
+    }
+  }, [filteredResults]);
 
   // Redirection si non authentifié
   useEffect(() => {
@@ -295,6 +307,11 @@ export default function ProductAnalysisPage() {
         
         {/* Graphiques agrégés */}
         {filteredResults.length > 0 && <ProductsAggregateCharts products={filteredResults} />}
+        
+        {/* Graphique de comparaison avec le groupement */}
+        {showComparison && filteredResults.length > 0 && (
+          <GlobalComparisonChart products={filteredResults} />
+        )}
         
         {/* Tableau des résultats */}
         <ProductResultTable products={filteredResults} />
