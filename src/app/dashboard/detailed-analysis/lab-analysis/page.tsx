@@ -18,6 +18,7 @@ import { Product } from '@/components/dashboard/products/ProductResultTable';
 import { LabStockSummary } from '@/components/dashboard/labs/LabStockSummary';
 import { LabMarginSummary } from '@/components/dashboard/labs/LabMarginSummary';
 import { LabSalesTrendSummary } from '@/components/dashboard/labs/LabSalesTrendSummary';
+import { LabComparisonChart } from '@/components/dashboard/labs/LabComparisonChart';
 
 export const mockProductData: Product[] = [
   // Sanofi Products
@@ -533,6 +534,10 @@ export default function LabAnalysisPage() {
               allProducts={mockProductData} 
             />
           </div>
+        )}
+
+        {searchResults.length > 0 && (
+          <LabComparisonChart laboratories={searchResults} />
         )}
         
         {/* Tableau des résultats */}
