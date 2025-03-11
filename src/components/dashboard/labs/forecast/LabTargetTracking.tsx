@@ -235,7 +235,7 @@ export function LabTargetTracking({ laboratories }: LabTargetTrackingProps) {
               
               {/* Ligne de référence pour l'objectif */}
               <ReferenceLine 
-                y={currentTarget} 
+                y={currentTarget as any} 
                 stroke="#F59E0B" 
                 strokeWidth={2}
                 strokeDasharray="3 3"

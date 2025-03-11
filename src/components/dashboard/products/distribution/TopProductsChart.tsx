@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { LoadingState, ErrorState } from '@/components/ui/LoadingState';
 
 // Types pour les données
@@ -126,21 +126,20 @@ const TopProductsChart = ({ product, type }: TopProductsChartProps) => {
             />
             <Tooltip content={renderTooltip} />
             <Bar 
-              dataKey="value" 
-              name="Ventes" 
-              fill="#4F46E5"
-              radius={[0, 4, 4, 0]}
-              // Colore différemment le produit actuel
-              background={{ fill: '#f3f4f6' }}
-              barSize={24}
-            >
-              {data.map((entry, index) => (
-                <cell 
-                  key={`cell-${index}`} 
-                  fill={entry.isCurrentProduct ? '#818CF8' : '#4F46E5'} 
-                />
-              ))}
-            </Bar>
+            dataKey="value" 
+            name="Ventes" 
+            fill="#4F46E5"
+            radius={[0, 4, 4, 0]}
+            background={{ fill: '#f3f4f6' }}
+            barSize={24}
+          >
+            {data.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={entry.isCurrentProduct ? '#818CF8' : '#4F46E5'} 
+              />
+            ))}
+          </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>

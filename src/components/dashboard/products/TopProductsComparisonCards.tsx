@@ -1,9 +1,9 @@
 // src/components/dashboard/labs/comparison/TopProductsComparisonCards.tsx
 import React from 'react';
-import { Laboratory } from '../LabResultTable';
-import { Product } from '../../products/ProductResultTable';
 import { LoadingState, ErrorState } from '@/components/ui/LoadingState';
 import { FiArrowUp, FiArrowDown, FiPackage, FiDollarSign, FiPieChart, FiShoppingCart } from 'react-icons/fi';
+import { Laboratory } from '../labs/LabResultTable';
+import { Product } from './ProductResultTable';
 
 interface ProductComparisonData {
   productName: string;
@@ -20,6 +20,13 @@ interface ProductComparisonData {
   percentageMargin: number;
   percentageStock: number;
 }
+
+interface PerformanceIndicatorProps {
+  value: number | string;  // Permettre à la fois number et string
+  percentage: number;
+  isInverse?: boolean;
+}
+
 
 interface TopProductsComparisonCardsProps {
   laboratory: Laboratory;
@@ -101,7 +108,11 @@ export function TopProductsComparisonCards({
   }
 
   // Composant pour l'indicateur de performance
-  const PerformanceIndicator = ({ value, percentage, isInverse = false }) => {
+  const PerformanceIndicator = ({ 
+    value, 
+    percentage, 
+    isInverse = false 
+  }: PerformanceIndicatorProps) => {
     const isPositive = isInverse ? percentage <= 100 : percentage >= 100;
     const Icon = isPositive ? FiArrowUp : FiArrowDown;
     

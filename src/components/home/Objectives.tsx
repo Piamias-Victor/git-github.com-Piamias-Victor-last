@@ -56,7 +56,7 @@ export function Objectives() {
           </div>
           
           {/* Bottom metrics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             <div className="text-center">
               <div className="text-3xl sm:text-4xl font-bold">15%</div>
               <div className="text-sm opacity-80">Optimisation moyenne des stocks</div>
@@ -73,7 +73,7 @@ export function Objectives() {
               <div className="text-3xl sm:text-4xl font-bold">30+</div>
               <div className="text-sm opacity-80">Pharmacies connectées</div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

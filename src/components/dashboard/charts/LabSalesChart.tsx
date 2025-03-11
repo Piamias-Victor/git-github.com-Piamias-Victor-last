@@ -222,7 +222,7 @@ export function LabSalesChart({
             title="Labs sélectionnés"
             description="Nombre de laboratoires"
             value={`${laboratories.length}`}
-            icon="users"
+            icon="check-circle"
             colorScheme="blue"
             filterType="labs"
             filterValue="count"

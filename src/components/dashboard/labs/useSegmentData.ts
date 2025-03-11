@@ -1,4 +1,3 @@
-// src/components/dashboard/labs/visualization/useSegmentData.ts
 import { useMemo } from 'react';
 import { Product } from '@/components/dashboard/products/ProductResultTable';
 import { Laboratory } from '@/components/dashboard/labs/LabResultTable';
@@ -50,6 +49,14 @@ export interface PositioningData {
   }[];
 }
 
+// Type étendu de Product incluant des champs de segment
+interface EnrichedProduct extends Product {
+  universe?: string;
+  category: string;
+  family?: string;
+  range_name?: string;
+}
+
 /**
  * Hook personnalisé pour extraire et analyser les données des segments de produits
  * pour les laboratoires sélectionnés
@@ -61,7 +68,7 @@ export function useSegmentData(
 ) {
   // Enrichir les données produit avec des segments si nécessaire
   const enrichedProducts = useMemo(() => {
-    return enrichProductsWithSegmentData(allProducts);
+    return enrichProductsWithSegmentData(allProducts) as EnrichedProduct[];
   }, [allProducts]);
 
   // Filtrer les produits des laboratoires sélectionnés
@@ -76,7 +83,7 @@ export function useSegmentData(
     if (!labProducts.length) return { name: 'Segments', children: [] };
 
     // Mapper le type de segment au champ correspondant dans les données de produit
-    const getSegmentField = (segType: SegmentType): string => {
+    const getSegmentField = (segType: SegmentType): keyof EnrichedProduct => {
       switch (segType) {
         case 'universe': return 'universe';
         case 'category': return 'category';
@@ -91,11 +98,11 @@ export function useSegmentData(
     
     // Grouper les produits par la valeur du segment
     labProducts.forEach(product => {
-      const segmentValue = product[segmentField] || 'Non défini';
+      const segmentValue = (product[segmentField] || 'Non défini') as string;
       if (!segments[segmentValue]) {
         segments[segmentValue] = [];
       }
-      segments[segmentValue].push(product);
+      segments[segmentValue].push(product as any);
     });
     
     // Transformer en format pour TreeMap

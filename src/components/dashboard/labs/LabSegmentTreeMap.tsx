@@ -24,7 +24,7 @@ export function LabSegmentTreeMap({ treeMapData }: LabSegmentTreeMapProps) {
       <Treemap
         data={treeMapData.children}
         dataKey="value"
-        ratio={4/3}
+        aspectRatio={4/3}
         stroke="#fff"
         content={<CustomTreemapContent />}
       >

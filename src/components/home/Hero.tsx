@@ -12,7 +12,7 @@ export function Hero() {
         <div className="space-y-8">
           {/* Subtle badge/tag for visual interest */}
           <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
-            Projet pour groupement pharmaceutique
+            Apothical Développement
           </div>
           
           {/* Main headline with gradient effect */}

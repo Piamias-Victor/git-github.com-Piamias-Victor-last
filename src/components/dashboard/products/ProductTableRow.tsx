@@ -41,7 +41,7 @@ export function ProductTableRow({ product, viewMode }: ProductTableRowProps) {
         </TableCell>
         <TableCell>
           {/* Ajout de la classe max-w-xs et truncate pour limiter la largeur et tronquer le texte */}
-          <div className="max-w-[17rem] truncate">
+          <div className="max-w-[15rem] truncate">
             <span className="font-medium text-gray-900 dark:text-white" title={product.name}>
               {product.name}
             </span>

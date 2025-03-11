@@ -93,23 +93,23 @@ export function About() {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 text-center">
-                  <div className="text-3xl font-bold text-sky-600 dark:text-sky-400">5+</div>
+                  <div className="text-3xl font-bold text-sky-600 dark:text-sky-400">3+</div>
                   <div className="text-sm text-gray-600 dark:text-gray-300">années d'expérience</div>
                 </div>
                 
                 <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-center">
-                  <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">20+</div>
+                  <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">10+</div>
                   <div className="text-sm text-gray-600 dark:text-gray-300">projets réalisés</div>
                 </div>
                 
                 <div className="p-4 rounded-xl bg-teal-50 dark:bg-teal-900/20 text-center">
-                  <div className="text-3xl font-bold text-teal-600 dark:text-teal-400">300+</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">pharmacies équipées</div>
+                  <div className="text-3xl font-bold text-teal-600 dark:text-teal-400">30+</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">pharmacies accompagnées</div>
                 </div>
                 
                 <div className="p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 text-center">
-                  <div className="text-3xl font-bold text-sky-600 dark:text-sky-400">10+</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">groupements partenaires</div>
+                  <div className="text-3xl font-bold text-sky-600 dark:text-sky-400">Apothical</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">partenaire</div>
                 </div>
               </div>
               

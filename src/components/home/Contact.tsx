@@ -31,7 +31,7 @@ export function Contact() {
                 </div>
                 <div>
                   <h4 className="text-lg font-medium mb-1 text-gray-900 dark:text-white">Email</h4>
-                  <p className="text-gray-600 dark:text-gray-300">contact@phardev.com</p>
+                  <p className="text-gray-600 dark:text-gray-300">sasphardev@gmail.com</p>
                 </div>
               </div>
               
@@ -41,7 +41,7 @@ export function Contact() {
                 </div>
                 <div>
                   <h4 className="text-lg font-medium mb-1 text-gray-900 dark:text-white">Téléphone</h4>
-                  <p className="text-gray-600 dark:text-gray-300">+33 (0)1 23 45 67 89</p>
+                  <p className="text-gray-600 dark:text-gray-300">+33 (0)6 24 17 47 24</p>
                 </div>
               </div>
               
@@ -52,8 +52,8 @@ export function Contact() {
                 <div>
                   <h4 className="text-lg font-medium mb-1 text-gray-900 dark:text-white">Adresse</h4>
                   <p className="text-gray-600 dark:text-gray-300">
-                    123 Avenue de la Pharmacie<br />
-                    75000 Paris, France
+                    53 Rue du Soldat Ferrari<br />
+                    83400 Hyeres, France
                   </p>
                 </div>
               </div>
@@ -61,7 +61,7 @@ export function Contact() {
             
             <div className="mt-8 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-center">
               <p className="text-gray-600 dark:text-gray-300 font-medium">
-                Horaires d'ouverture : Lundi - Vendredi, 9h - 18h
+                Piamias Victor
               </p>
             </div>
           </div>
