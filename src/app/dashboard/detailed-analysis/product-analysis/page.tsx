@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
-import { ProductSearch } from '@/components/dashboard/analysis/ProductSearch';
-import { ProductResultTable, Product } from '@/components/dashboard/analysis/ProductResultTable';
-import { ProductSearchStats } from '@/components/dashboard/analysis/ProductSearchStats';
+import { ProductResultTable, Product } from '@/components/dashboard/products/ProductResultTable';
+import { ProductSearchStats } from '@/components/dashboard/products/ProductSearchStats';
 import { SearchHelp } from '@/components/dashboard/analysis/SearchHelp';
 import { createUrlWithCurrentDateParams } from '@/utils/navigationUtils';
+import { ProductSearch } from '@/components/dashboard/products/ProductSearch';
 
 // Données de test pour démonstration
 const mockProductData: Product[] = [

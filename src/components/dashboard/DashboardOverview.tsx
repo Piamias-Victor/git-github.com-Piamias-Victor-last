@@ -1,11 +1,13 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
-import { StatCards } from '@/components/dashboard/StatCards';
-import { NavigationCards } from '@/components/dashboard/NavigationCards';
-import { ActionItems } from '@/components/dashboard/ActionItems';
-import { GlobalSummary } from '@/components/dashboard/GlobalSummary';
+import { useSession } from "next-auth/react";
+import { ActionItems } from "./ActionItems";
+import { DashboardHeader } from "./DashboardHeader";
+import { NavigationCards } from "./NavigationCards";
+import { GlobalSummary } from "./stats/GlobalSummary";
+import { StatCards } from "./stats/StatCards";
+
+
 
 /**
  * DashboardOverview Component

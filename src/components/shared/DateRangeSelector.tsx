@@ -3,9 +3,9 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { FiCalendar, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { useSearchParams } from 'next/navigation';
-import { useDateRange } from '@/providers/DateRangeProvider';
 import { PresetRangeOptions } from './PresetRangeOptions';
 import { CustomDateRange } from './CustomDateRange';
+import { useDateRange } from '@/providers/DateRangeProvider';
 
 // Séparation du contenu qui utilise useSearchParams
 function DateRangeSelectorContent() {

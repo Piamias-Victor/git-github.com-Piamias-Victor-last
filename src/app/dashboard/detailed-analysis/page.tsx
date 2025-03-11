@@ -7,7 +7,7 @@ import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import Link from 'next/link';
 import { FiArrowLeft, FiBox, FiPackage, FiGrid, FiSearch, FiBarChart, FiTrendingUp } from 'react-icons/fi';
 import { AnalysisCategoryCard } from '@/components/dashboard/analysis/AnalysisCategoryCard';
-import { StatisticsSection } from '@/components/dashboard/analysis/StatisticsSection';
+import { StatisticsSection } from '@/components/dashboard/stats/StatisticsSection';
 import { createUrlWithCurrentDateParams } from '@/utils/navigationUtils';
 
 /**

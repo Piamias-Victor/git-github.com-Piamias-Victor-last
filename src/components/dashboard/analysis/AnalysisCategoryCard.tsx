@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { TopItems } from '@/components/dashboard/analysis/TopItems';
+import { TopItems } from '@/components/dashboard/stats/TopItems';
 import { useUrlWithDateParams } from '@/utils/navigationUtils';
 
 interface AnalysisCategoryCardProps {

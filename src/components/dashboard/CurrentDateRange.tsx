@@ -1,6 +1,6 @@
+import { useDateRange } from '@/providers/DateRangeProvider';
 import React from 'react';
 import { FiCalendar } from 'react-icons/fi';
-import { useDateRange } from '@/providers/DateRangeProvider';
 
 /**
  * Composant affichant la plage de dates actuelle

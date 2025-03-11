@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
-import { SearchHeader } from './SearchHeader';
-import { SearchInput } from './SearchInput';
-import { CodeListInput } from './CodeListInput';
-import { SearchInfo } from './SearchInfo';
+
 import { detectSearchType, generateMockResults } from '@/utils/searchUtils';
+import { CodeListInput } from '../analysis/CodeListInput';
+import { SearchHeader } from '../analysis/SearchHeader';
+import { SearchInfo } from '../analysis/SearchInfo';
+import { SearchInput } from '../analysis/SearchInput';
 
 interface ProductSearchProps {
   onSearch: (results: any[]) => void;
