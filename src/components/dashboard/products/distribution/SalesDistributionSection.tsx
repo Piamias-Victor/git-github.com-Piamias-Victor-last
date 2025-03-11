@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { Product } from '../ProductResultTable';
 import { Card } from '@/components/ui/Card';
-import { SalesDistributionChart } from './SalesDistributionChart';
 import { PerformanceMetrics } from './PerformanceMetrics';
-import { FiPieChart, FiBarChart2, FiRefreshCw } from 'react-icons/fi';
+import { FiList, FiBarChart2, FiRefreshCw } from 'react-icons/fi';
+import TopProductsChart from './TopProductsChart';
 
 interface SalesDistributionSectionProps {
   product: Product;
@@ -18,7 +18,7 @@ export function SalesDistributionSection({ product }: SalesDistributionSectionPr
       <div className="p-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Répartition des ventes
+            Top 5 des Produits
           </h3>
           
           <div className="flex space-x-1">
@@ -30,7 +30,7 @@ export function SalesDistributionSection({ product }: SalesDistributionSectionPr
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
               }`}
             >
-              <FiPieChart className="mr-1.5" size={16} /> Par catégorie
+              <FiList className="mr-1.5" size={16} /> Par catégorie
             </button>
             <button
               onClick={() => setActiveTab('laboratory')}
@@ -49,14 +49,13 @@ export function SalesDistributionSection({ product }: SalesDistributionSectionPr
           <div className="flex items-start">
             <FiRefreshCw className="text-indigo-500 dark:text-indigo-400 mt-0.5 mr-2 flex-shrink-0" size={16} />
             <p className="text-sm text-indigo-700 dark:text-indigo-300">
-              Cette analyse montre comment {product.name} se positionne par rapport aux autres produits de 
-              {activeTab === 'category' ? ' sa catégorie' : ' son laboratoire'} en termes de ventes et de performance.
+              Ce graphique présente le top 5 des produits {activeTab === 'category' ? 'de la catégorie' : 'du laboratoire'} {activeTab === 'category' ? product.category : product.laboratory} en termes de ventes. Vous pouvez ainsi situer la performance de votre produit par rapport à la concurrence.
             </p>
           </div>
         </div>
         
         <div className="grid md:grid-cols-2 gap-6">
-          <SalesDistributionChart product={product} type={activeTab} />
+          <TopProductsChart product={product} type={activeTab} />
           <PerformanceMetrics product={product} />
         </div>
       </div>
