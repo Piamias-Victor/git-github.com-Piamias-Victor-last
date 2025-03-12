@@ -31,7 +31,6 @@ export function ProductSectionNav({ activeSection = 'overview' }: { activeSectio
         <NavLink href="#overview" label="Aperçu" isActive={activeSection === 'overview'} />
         <NavLink href="#analytics" label="Analyses" isActive={activeSection === 'analytics'} />
         <NavLink href="#comparison" label="Comparaison" isActive={activeSection === 'comparison'} />
-        <NavLink href="#distribution" label="Distribution" isActive={activeSection === 'distribution'} />
         <NavLink href="#pharmacies" label="Pharmacies" isActive={activeSection === 'pharmacies'} />
         <NavLink href="#results" label="Résultats" isActive={activeSection === 'results'} />
       </div>

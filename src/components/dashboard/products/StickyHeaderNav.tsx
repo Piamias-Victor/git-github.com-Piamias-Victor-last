@@ -57,11 +57,9 @@ export function StickyHeaderNav({
         )}
         
         {/* Navigation par sections - apparaît seulement quand il y a des résultats */}
-        {showNavigation && (
           <div className="mt-2">
             <ProductSectionNav activeSection={activeSection} />
           </div>
-        )}
       </div>
     </div>
   );
