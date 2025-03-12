@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import Link from 'next/link';
-import { FiArrowLeft, FiFilter } from 'react-icons/fi';
+import { FiArrowLeft, FiFilter, FiUsers } from 'react-icons/fi';
 import { ProductResultTable, Product } from '@/components/dashboard/products/ProductResultTable';
 import { ProductSearchStats } from '@/components/dashboard/products/ProductSearchStats';
 import { SearchHelp } from '@/components/dashboard/analysis/SearchHelp';
@@ -16,6 +16,9 @@ import { GlobalComparisonChart } from '@/components/dashboard/products/compariso
 import { filterProducts } from '@/utils/filterUtils';
 import { SalesDistributionSection } from '@/components/dashboard/products/distribution/SalesDistributionSection';
 import { mockProductData } from '@/utils/mockProductData';
+import { PharmacyResultTable } from '@/components/dashboard/products/PharmacyResultTable';
+import { mockPharmacyData } from '@/utils/mockPharmacyData';
+
 
 /**
  * Page d'analyse détaillée par produit
@@ -29,6 +32,7 @@ export default function ProductAnalysisPage() {
   const [activeFilter, setActiveFilter] = useState<{type: string, value: string} | null>(null);
   const [filterTitle, setFilterTitle] = useState<string>('');
   const [showComparison, setShowComparison] = useState<boolean>(false);
+  const [showPharmacies, setShowPharmacies] = useState<boolean>(false);
 
   // Récupérer les filtres depuis l'URL
   useEffect(() => {
@@ -89,8 +93,12 @@ export default function ProductAnalysisPage() {
     if (filteredResults.length > 0) {
       // On pourrait définir un seuil minimum pour afficher la comparaison
       setShowComparison(filteredResults.length >= 3);
+      
+      // Afficher les pharmacies si nous avons des résultats
+      setShowPharmacies(true);
     } else {
       setShowComparison(false);
+      setShowPharmacies(false);
     }
   }, [filteredResults]);
 
@@ -191,11 +199,31 @@ export default function ProductAnalysisPage() {
           <GlobalComparisonChart products={filteredResults} />
         )}
 
+        {/* Section des pharmacies */}
+        {showPharmacies && (
+          <div className="mt-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                  <FiUsers className="mr-2" /> 
+                  Pharmacies distribuant ces produits
+                </h3>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {mockPharmacyData.length} pharmacies trouvées
+                </div>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Consultez la liste des pharmacies qui distribuent les produits sélectionnés et leurs performances associées.
+              </p>
+            </div>
+            <PharmacyResultTable pharmacies={mockPharmacyData} />
+          </div>
+        )}
+
         {/* Ajouter la section de répartition des ventes si nous avons des résultats */}
         {filteredResults.length === 1 && (
           <SalesDistributionSection product={filteredResults[0]} />
         )}
-
         
         {/* Tableau des résultats */}
         <ProductResultTable products={filteredResults} />

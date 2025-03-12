@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import Link from 'next/link';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiUsers } from 'react-icons/fi';
 import { LabSearch } from '@/components/dashboard/labs/LabSearch';
 import { LabResultTable } from '@/components/dashboard/labs/LabResultTable';
 import { LabSearchStats } from '@/components/dashboard/labs/LabSearchStats';
@@ -24,6 +24,8 @@ import { LabAnnualForecast } from '@/components/dashboard/labs/forecast/LabAnnua
 import { LabTargetTracking } from '@/components/dashboard/labs/forecast/LabTargetTracking';
 import { generateMockLabResults } from '@/utils/labUtils';
 import { mockProductData } from '@/utils/mockProductData';
+import { PharmacyResultTable } from '@/components/dashboard/products/PharmacyResultTable';
+import { mockPharmacyData } from '@/utils/mockPharmacyData';
 
 /**
  * Page d'analyse détaillée par laboratoire
@@ -149,6 +151,26 @@ export default function LabAnalysisPage() {
         {searchResults.length > 0 && (
           <LabTargetTracking laboratories={searchResults} />
         )}
+
+         {searchResults.length > 0 && (
+                  <div className="mt-6">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm mb-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                          <FiUsers className="mr-2" /> 
+                          Pharmacies distribuant ces produits
+                        </h3>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {mockPharmacyData.length} pharmacies trouvées
+                        </div>
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        Consultez la liste des pharmacies qui distribuent les produits sélectionnés et leurs performances associées.
+                      </p>
+                    </div>
+                    <PharmacyResultTable pharmacies={mockPharmacyData} />
+                  </div>
+                )}
         
         {/* Tableau des résultats */}
         {searchResults.length > 0 && (
