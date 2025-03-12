@@ -1,12 +1,20 @@
+import React from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
 
-/**
- * Contact Component
- * 
- * Displays contact information for the Phardev company.
- * Simple, clean layout with contact details and an optional contact form.
- */
 export function Contact() {
+  // Créer une v-card au format vCard
+  const vCardData = `BEGIN:VCARD
+VERSION:3.0
+N:Piamias;Victor;;;
+FN:Victor Piamias
+ORG:Phardev
+TITLE:Fondateur
+TEL:+33624174724
+EMAIL:sasphardev@gmail.com
+ADR:53 Rue du Soldat Ferrari;83400 Hyeres;France;;;
+END:VCARD`;
+
   return (
     <section id="contact" className="py-16 sm:py-24 bg-gray-50 dark:bg-gray-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,29 +52,32 @@ export function Contact() {
                   <p className="text-gray-600 dark:text-gray-300">+33 (0)6 24 17 47 24</p>
                 </div>
               </div>
-              
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 mt-1 w-10 h-10 flex items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300">
-                  <FiMapPin size={20} />
-                </div>
-                <div>
-                  <h4 className="text-lg font-medium mb-1 text-gray-900 dark:text-white">Adresse</h4>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    53 Rue du Soldat Ferrari<br />
-                    83400 Hyeres, France
-                  </p>
-                </div>
-              </div>
+
             </div>
             
-            <div className="mt-8 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-center">
-              <p className="text-gray-600 dark:text-gray-300 font-medium">
+            <div className="mt-8 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-center flex flex-col items-center">
+              <p className="text-gray-600 dark:text-gray-300 font-medium mb-4">
                 Piamias Victor
+              </p>
+              
+              {/* QR Code pour la v-card */}
+              <div className="bg-white p-2 rounded-lg shadow-sm">
+                <QRCodeSVG 
+                  value={vCardData} 
+                  size={128} 
+                  bgColor="#ffffff" 
+                  fgColor="#000000" 
+                  level="M" 
+                  includeMargin={true}
+                />
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                Scannez pour enregistrer mes coordonnées
               </p>
             </div>
           </div>
           
-          {/* Simple contact form */}
+          {/* Reste du code inchangé */}
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
             <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Envoyez-nous un message</h3>
             
