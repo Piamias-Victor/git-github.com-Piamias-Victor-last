@@ -8,6 +8,15 @@ interface PharmacyComparisonTabProps {
   pharmacy: Pharmacy;
 }
 
+
+interface ComparativeMetricProps {
+    label: string;
+    value: number | string;
+    average: number | string;
+    percentage: string | number;
+    isMonetary?: boolean;
+  }
+
 export function PharmacyComparisonTab({ pharmacy }: PharmacyComparisonTabProps) {
   // Formatage des valeurs monétaires
   const formatCurrency = (value: number) => {
@@ -89,9 +98,9 @@ export function PharmacyComparisonTab({ pharmacy }: PharmacyComparisonTabProps) 
   const { radarData, metrics } = generateComparisonData();
 
   // Composant pour une métrique comparative
-  const ComparativeMetric = ({ label, value, average, percentage, isMonetary = false }) => {
-    const formattedValue = isMonetary ? formatCurrency(value) : value;
-    const formattedAvg = isMonetary ? formatCurrency(average) : average;
+  const ComparativeMetric = ({ label, value, average, percentage, isMonetary = false } : ComparativeMetricProps) => {
+    const formattedValue = isMonetary ? formatCurrency(value as any) : value;
+    const formattedAvg = isMonetary ? formatCurrency(average as any) : average;
     const isPositive = Number(percentage) >= 100;
     const Icon = isPositive ? FiArrowUp : FiArrowDown;
     const colorClass = isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400";

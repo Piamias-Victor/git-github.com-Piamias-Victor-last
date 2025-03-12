@@ -74,7 +74,8 @@ export function PharmacyMapTab({ pharmacy }: PharmacyMapTabProps) {
   // Initialiser la carte lorsque le composant est monté
   useEffect(() => {
     // Corrige l'icône qui n'apparaît pas par défaut
-    delete L.Icon.Default.prototype._getIconUrl;
+    // Utiliser une assertion de type pour contourner la vérification TypeScript
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
       iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',

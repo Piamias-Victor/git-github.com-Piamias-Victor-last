@@ -139,8 +139,8 @@ export function PharmacyStockTab({ pharmacy }: PharmacyStockTabProps) {
         <SummaryMetricCard
           label="Rotation"
           value={`${stockTurnover}x`}
-          icon={stockTurnover >= 3 ? <FiTrendingUp className="text-emerald-500" /> : <FiTrendingDown className="text-amber-500" />}
-          valueColor={stockTurnover >= 3 ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}
+          icon={parseFloat(stockTurnover) >= 3 ? <FiTrendingUp className="text-emerald-500" /> : <FiTrendingDown className="text-amber-500" />}
+          valueColor={parseFloat(stockTurnover) >= 3 ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}
         />
         
         <SummaryMetricCard
