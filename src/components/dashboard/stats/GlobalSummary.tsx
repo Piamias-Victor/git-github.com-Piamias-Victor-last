@@ -1,7 +1,6 @@
 // src/components/dashboard/stats/GlobalSummary.tsx
 import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { SummaryCard } from './SummaryCard';
 
 // Interface pour les types de produits
 interface Product {
@@ -215,6 +214,7 @@ export function GlobalSummary() {
       {/* Graphique sur toute la largeur */}
       <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
         <RevenueChart />
+        <div className='h-16 w-full'/>
         
         {/* Métriques sous le graphique */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
