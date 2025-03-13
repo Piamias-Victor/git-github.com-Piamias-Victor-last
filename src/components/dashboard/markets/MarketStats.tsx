@@ -217,79 +217,96 @@ export function MarketStats({ segments, type }: MarketStatsProps) {
           </button>
           
           {showComposition && (
-            <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Composition détaillée
-              </h4>
-              
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Laboratoires:</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{uniqueLabs.length}</span>
-                </div>
-                
-                {type !== 'universe' && topParents.length > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-500 dark:text-gray-400">
-                      {type === 'category' || type === 'sub_category' ? 'Univers:' : 
-                       type === 'family' || type === 'sub_family' ? 'Catégories:' : 'Parents:'}
-                    </span>
-                    <span className="font-medium text-gray-900 dark:text-white">{topParents.length}</span>
+          <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              Composition détaillée
+            </h4>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <h5 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Structure du marché
+                </h5>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Laboratoires:</span>
+                    <span className="font-medium text-gray-900 dark:text-white text-sm">{uniqueLabs.length}</span>
                   </div>
-                )}
-                
-                <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Moy. produits:</span>
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    {Math.round(totalProducts / segments.length)} par segment
-                  </span>
-                </div>
-                
-                <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">CA moyen:</span>
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    {formatCurrency(totalRevenue / segments.length)}
-                  </span>
+                  
+                  {type !== 'universe' && topParents.length > 0 && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {type === 'category' || type === 'sub_category' ? 'Univers:' : 
+                        type === 'family' || type === 'sub_family' ? 'Catégories:' : 'Parents:'}
+                      </span>
+                      <span className="font-medium text-gray-900 dark:text-white text-sm">{topParents.length}</span>
+                    </div>
+                  )}
                 </div>
               </div>
               
-              {distribution && Object.keys(distribution).length > 0 && (
-                <div className="mt-3">
-                  <h5 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
-                    {type === 'universe' ? 'Distribution par univers' : 
-                     type === 'category' ? 'Distribution par univers parent' : 
-                     'Distribution par catégorie parente'}
-                  </h5>
+              <div className="p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <h5 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Moyennes par segment
+                </h5>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Produits:</span>
+                    <span className="font-medium text-gray-900 dark:text-white text-sm">
+                      {Math.round(totalProducts / segments.length)} par segment
+                    </span>
+                  </div>
                   
-                  <div className="space-y-2">
-                    {Object.entries(distribution)
-                      .sort((a, b) => b[1].percentage - a[1].percentage)
-                      .slice(0, 4)
-                      .map(([name, { count, percentage }], index) => (
-                        <div key={index} className="flex items-center">
-                          <div className="flex-grow">
-                            <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 truncate" title={name}>
-                              {name}
-                            </div>
-                            <div className="w-full bg-gray-200 dark:bg-gray-600 h-1.5 rounded-full">
-                              <div 
-                                className="bg-indigo-600 dark:bg-indigo-400 h-1.5 rounded-full" 
-                                style={{ width: `${percentage}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                          <div className="ml-2 text-xs text-right">
-                            <span className="font-medium text-gray-900 dark:text-white">{percentage.toFixed(1)}%</span>
-                            <br />
-                            <span className="text-gray-500 dark:text-gray-400">{count} {count > 1 ? 'segments' : 'segment'}</span>
-                          </div>
-                        </div>
-                    ))}
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">CA moyen:</span>
+                    <span className="font-medium text-gray-900 dark:text-white text-sm">
+                      {formatCurrency(totalRevenue / segments.length)}
+                    </span>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
-          )}
+            
+            {distribution && Object.keys(distribution).length > 0 && (
+              <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm">
+                <h5 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-3">
+                  {type === 'universe' ? 'Répartition du chiffre d\'affaires par univers' : 
+                  type === 'category' ? 'Répartition par univers parent' : 
+                  'Répartition par catégorie parente'}
+                </h5>
+                
+                <div className="space-y-3">
+                  {Object.entries(distribution)
+                    .sort((a, b) => b[1].percentage - a[1].percentage)
+                    .slice(0, 4)
+                    .map(([name, { count, percentage }], index) => (
+                      <div key={index}>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="font-medium text-gray-700 dark:text-gray-300 truncate max-w-[200px]" title={name}>
+                            {name}
+                          </span>
+                          <div className="flex items-center">
+                            <span className="font-medium text-indigo-600 dark:text-indigo-400 mr-2">
+                              {percentage.toFixed(1)}%
+                            </span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {count} produit{count > 1 ? 's' : ''}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-600 h-2 rounded-full">
+                          <div 
+                            className="bg-indigo-600 dark:bg-indigo-400 h-2 rounded-full" 
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         </div>
       </div>
       
