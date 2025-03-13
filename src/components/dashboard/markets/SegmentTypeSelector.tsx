@@ -1,9 +1,11 @@
-// src/components/markets/SegmentTypeSelector.tsx
 import React from 'react';
+import { FiGrid, FiLayers, FiBox, FiTag, FiBookmark } from 'react-icons/fi';
 
 interface SegmentType {
   value: string;
   label: string;
+  icon: React.ReactNode;
+  description: string;
 }
 
 interface SegmentTypeSelectorProps {
@@ -17,15 +19,42 @@ export const SegmentTypeSelector: React.FC<SegmentTypeSelectorProps> = ({
 }) => {
   // Types de segments disponibles
   const segmentTypes: SegmentType[] = [
-    { value: 'universe', label: 'Univers' },
-    { value: 'category', label: 'Catégories' },
-    { value: 'sub_category', label: 'Sous-catégories' },
-    { value: 'family', label: 'Familles' },
-    { value: 'sub_family', label: 'Sous-familles' },
-    { value: 'specificity', label: 'Spécificités' },
-    { value: 'lab_distributor', label: 'Distributeurs' },
-    { value: 'brand_lab', label: 'Laboratoires' },
-    { value: 'range_name', label: 'Gammes' }
+    { 
+      value: 'universe', 
+      label: 'Univers',
+      icon: <FiGrid size={18} />,
+      description: 'Grands domaines du marché (ex: Médicaments, Parapharmacie)'
+    },
+    { 
+      value: 'category', 
+      label: 'Catégories',
+      icon: <FiLayers size={18} />,
+      description: 'Segments principaux dans chaque univers (ex: Douleur & Fièvre)'
+    },
+    { 
+      value: 'sub_category', 
+      label: 'Sous-catégories',
+      icon: <FiBox size={18} />,
+      description: 'Segments spécifiques dans chaque catégorie (ex: Antipyrétiques)'
+    },
+    { 
+      value: 'family', 
+      label: 'Familles',
+      icon: <FiTag size={18} />,
+      description: 'Regroupements de produits similaires (ex: Paracétamol)'
+    },
+    { 
+      value: 'sub_family', 
+      label: 'Sous-familles',
+      icon: <FiBookmark size={18} />,
+      description: 'Regroupements spécifiques dans une famille (ex: Paracétamol effervescent)'
+    },
+    { 
+      value: 'specificity', 
+      label: 'Spécificités',
+      icon: <FiTag size={18} />,
+      description: 'Caractéristiques transversales (ex: Enfants, Seniors)'
+    }
   ];
 
   return (
@@ -34,25 +63,41 @@ export const SegmentTypeSelector: React.FC<SegmentTypeSelectorProps> = ({
         Sélectionner le type de segment à analyser
       </h4>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {segmentTypes.map((type) => (
           <button
             key={type.value}
             onClick={() => onTypeChange(type.value)}
-            className={`px-3 py-2 text-sm rounded-md transition-colors ${
+            className={`p-3 rounded-lg text-left transition-colors border ${
               selectedType === type.value
-                ? 'bg-indigo-600 text-white'
-                : 'bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
+                ? 'bg-indigo-50 border-indigo-200 dark:bg-indigo-900/20 dark:border-indigo-800'
+                : 'bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'
             }`}
           >
-            {type.label}
+            <div className="flex items-center">
+              <div className={`p-2 rounded-full mr-3 ${
+                selectedType === type.value
+                  ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300'
+                  : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+              }`}>
+                {type.icon}
+              </div>
+              <div>
+                <div className={`font-medium ${
+                  selectedType === type.value
+                    ? 'text-indigo-600 dark:text-indigo-300'
+                    : 'text-gray-700 dark:text-gray-300'
+                }`}>
+                  {type.label}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {type.description}
+                </div>
+              </div>
+            </div>
           </button>
         ))}
       </div>
-      
-      <p className="mt-3 text-xs text-gray-500 dark:text-gray-400 italic">
-        Le choix du type de segment modifie l'approche d'analyse et la granularité des données.
-      </p>
     </div>
   );
 };

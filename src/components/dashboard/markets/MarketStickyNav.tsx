@@ -1,10 +1,9 @@
-// src/components/markets/MarketStickyNav.tsx
 import React, { useState } from 'react';
 import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
 import { MarketSearch } from './MarketSearch';
 import { MarketSectionNav } from './MarketSectionNav';
 import { SegmentTypeSelector } from './SegmentTypeSelector';
-import { MarketSegment } from '@/utils/marketSegmentData';
+import { MarketSegment } from '@/app/dashboard/detailed-analysis/market-analysis/page';
 
 interface MarketStickyNavProps {
   onSearch: (segments: MarketSegment[]) => void;
@@ -12,6 +11,7 @@ interface MarketStickyNavProps {
   activeSection: string;
   segmentType: string;
   onSegmentTypeChange: (type: string) => void;
+  searchAllSegments: (searchTerm: string) => MarketSegment[];
 }
 
 export const MarketStickyNav: React.FC<MarketStickyNavProps> = ({
@@ -19,7 +19,8 @@ export const MarketStickyNav: React.FC<MarketStickyNavProps> = ({
   showNavigation,
   activeSection,
   segmentType,
-  onSegmentTypeChange
+  onSegmentTypeChange,
+  searchAllSegments
 }) => {
   const [showSearchBar, setShowSearchBar] = useState(true);
   const [showTypeSelector, setShowTypeSelector] = useState(false);
@@ -43,9 +44,6 @@ export const MarketStickyNav: React.FC<MarketStickyNavProps> = ({
       case 'family': return 'Familles';
       case 'sub_family': return 'Sous-familles';
       case 'specificity': return 'Spécificités';
-      case 'lab_distributor': return 'Distributeurs';
-      case 'brand_lab': return 'Laboratoires';
-      case 'range_name': return 'Gammes';
       default: return 'Segments';
     }
   };
@@ -100,7 +98,8 @@ export const MarketStickyNav: React.FC<MarketStickyNavProps> = ({
           <div id="search-container">
             <MarketSearch 
               onSearch={onSearch} 
-              selectedType={segmentType} 
+              selectedType={segmentType}
+              searchAllSegments={searchAllSegments}
             />
           </div>
         )}
@@ -114,4 +113,4 @@ export const MarketStickyNav: React.FC<MarketStickyNavProps> = ({
       </div>
     </div>
   );
-};
+}
