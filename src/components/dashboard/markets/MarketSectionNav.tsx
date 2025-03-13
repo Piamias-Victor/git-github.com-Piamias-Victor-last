@@ -1,6 +1,5 @@
-// src/components/dashboard/markets/MarketSectionNav.tsx
+// src/components/markets/MarketSectionNav.tsx
 import React from 'react';
-import { smoothScrollToAnchor } from '@/utils/scrollUtils';
 
 interface NavLinkProps {
   href: string;
@@ -8,7 +7,30 @@ interface NavLinkProps {
   isActive?: boolean;
 }
 
-function NavLink({ href, label, isActive = false }: NavLinkProps) {
+const NavLink: React.FC<NavLinkProps> = ({ href, label, isActive = false }) => {
+  // Fonction pour le défilement doux
+  const smoothScrollToAnchor = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const sectionId = href.replace('#', '');
+    const element = document.getElementById(sectionId);
+    
+    if (element) {
+      const offset = 100; // Décalage du haut
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+      
+      // Mettre à jour l'URL sans rechargement
+      if (typeof window !== 'undefined') {
+        window.history.pushState({}, '', href);
+      }
+    }
+  };
+
   return (
     <a 
       href={href}
@@ -22,21 +44,39 @@ function NavLink({ href, label, isActive = false }: NavLinkProps) {
       {label}
     </a>
   );
+};
+
+interface MarketSectionNavProps {
+  activeSection?: string;
 }
 
-export function MarketSectionNav({ activeSection = 'overview' }: { activeSection?: string }) {
+export const MarketSectionNav: React.FC<MarketSectionNavProps> = ({ 
+  activeSection = 'overview' 
+}) => {
+  // Sections disponibles
+  const sections = [
+    { id: 'overview', label: 'Aperçu' },
+    { id: 'hierarchy', label: 'Hiérarchie' },
+    { id: 'sales', label: 'Ventes' },
+    { id: 'evolution', label: 'Évolution' },
+    { id: 'seasonal', label: 'Saisonnalité' },
+    { id: 'laboratories', label: 'Laboratoires' },
+    { id: 'products', label: 'Produits' },
+    { id: 'segments', label: 'Segments' }
+  ];
+
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm mb-6 overflow-x-auto">
       <div className="flex space-x-2">
-        <NavLink href="#overview" label="Aperçu" isActive={activeSection === 'overview'} />
-        <NavLink href="#hierarchy" label="Hiérarchie" isActive={activeSection === 'hierarchy'} />
-        <NavLink href="#sales" label="Ventes" isActive={activeSection === 'sales'} />
-        <NavLink href="#evolution" label="Évolution" isActive={activeSection === 'evolution'} />
-        <NavLink href="#seasonal" label="Saisonnalité" isActive={activeSection === 'seasonal'} />
-        <NavLink href="#laboratories" label="Laboratoires" isActive={activeSection === 'laboratories'} />
-        <NavLink href="#products" label="Produits" isActive={activeSection === 'products'} />
-        <NavLink href="#segments" label="Segments" isActive={activeSection === 'segments'} />
+        {sections.map((section) => (
+          <NavLink 
+            key={section.id} 
+            href={`#${section.id}`} 
+            label={section.label} 
+            isActive={activeSection === section.id} 
+          />
+        ))}
       </div>
     </div>
   );
-}
+};
