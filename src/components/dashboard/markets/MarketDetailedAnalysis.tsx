@@ -4,18 +4,17 @@ import { MarketSegment } from '@/app/dashboard/detailed-analysis/market-analysis
 import { SectionContainer } from '@/components/ui/SectionContainer';
 import { FiBarChart2, FiBox, FiTrendingUp, FiPieChart, FiPackage, FiCalendar, FiTarget } from 'react-icons/fi';
 import { MarketSalesChart } from './charts/MarketSalesChart';
-import { MarketStockChart } from './charts/MarketStockChart';
-import { MarketTopProducts } from './MarketTopProducts';
-import { MarketStockSummary } from './summaries/MarketStockSummary';
-import { MarketMarginSummary } from './summaries/MarketMarginSummary';
-import { MarketSalesTrendSummary } from './summaries/MarketSalesTrendSummary';
-import { MarketComparisonChart } from './MarketComparisonChart';
-import { MarketSegmentVisualization } from './visualization/MarketSegmentVisualization';
-import { MarketAnnualForecast } from './forecast/MarketAnnualForecast';
-import { MarketSegmentTable } from './MarketSegmentTable';
 import { Product } from '@/components/dashboard/products/ProductResultTable';
 import { mockProductData } from '@/utils/mockProductData';
 import { useDateRange } from '@/providers/DateRangeProvider';
+import { MarketComparisonChart } from './MarketComparisonChart';
+import { MarketMarginSummary } from './MarketMarginSummary';
+import { MarketSalesTrendSummary } from './MarketSalesTrendSummary';
+import { MarketSegmentVisualization } from './MarketSegmentVisualization';
+import { MarketStockChart } from './MarketStockChart';
+import { MarketStockSummary } from './MarketStockSummary';
+import { MarketTopProducts } from './MarketTopProducts';
+import { MarketAnnualForecast } from './MarketAnnualForecast';
 
 interface MarketDetailedAnalysisProps {
   segment: MarketSegment;
