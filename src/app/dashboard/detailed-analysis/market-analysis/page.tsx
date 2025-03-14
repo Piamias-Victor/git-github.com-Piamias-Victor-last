@@ -27,6 +27,7 @@ import {
   mockSpecificities,
   mockLabs
 } from '@/utils/marketSegmentData';
+import { MarketDetailedAnalysis } from '@/components/dashboard/markets/MarketDetailedAnalysis';
 
 // Types
 export interface MarketSegment {
@@ -204,6 +205,14 @@ export default function MarketAnalysisPage() {
               />
             </SectionContainer>
             
+
+            {selectedSegment ? (
+      <MarketDetailedAnalysis segment={selectedSegment} />
+    ) : searchResults.length > 0 && (
+      <MarketDetailedAnalysis segment={searchResults[0]} />
+    )}
+
+    
             {/* Section Hiérarchie */}
             <SectionContainer
               id="hierarchy"

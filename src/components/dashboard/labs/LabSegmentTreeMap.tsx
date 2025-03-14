@@ -3,6 +3,10 @@ import React from 'react';
 import { Treemap, ResponsiveContainer, Tooltip } from 'recharts';
 import { TreeMapData } from './useSegmentData';
 
+const COLORS = [
+  '#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', 
+  '#EC4899', '#06B6D4', '#14B8A6', '#D97706', '#BE185D'
+];
 interface LabSegmentTreeMapProps {
   treeMapData: {
     name: string;
@@ -119,3 +123,63 @@ function CustomTooltip({ active, payload }: any) {
   
   return null;
 }
+
+const TreemapContent = (props: any) => {
+  const { x, y, width, height, name, value, index } = props;
+  const fill = COLORS[index % COLORS.length];
+  
+  if (width < 40 || height < 40) {
+    return (
+      <g>
+        <rect
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          style={{
+            fill,
+            stroke: '#fff',
+            strokeWidth: 2,
+            strokeOpacity: 1
+          }}
+        />
+      </g>
+    );
+  }
+  
+  return (
+    <g>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        style={{
+          fill,
+          stroke: '#fff',
+          strokeWidth: 2,
+          strokeOpacity: 1
+        }}
+      />
+      <text
+        x={x + width / 2}
+        y={y + height / 2 - 7}
+        textAnchor="middle"
+        fill="#fff"
+        fontSize={12}
+        fontWeight="bold"
+      >
+        {name}
+      </text>
+      <text
+        x={x + width / 2}
+        y={y + height / 2 + 10}
+        textAnchor="middle"
+        fill="#fff"
+        fontSize={10}
+      >
+        {value.toFixed(1)}%
+      </text>
+    </g>
+  );
+};

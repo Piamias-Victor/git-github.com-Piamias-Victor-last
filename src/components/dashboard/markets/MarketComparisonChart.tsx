@@ -208,7 +208,7 @@ export function MarketComparisonChart({
               <PolarAngleAxis dataKey="metric" />
               <PolarRadiusAxis 
                 angle={90} 
-                domain={showPercentages ? [0, 150] : 'auto'} 
+                domain={showPercentages ? [0, 150] : [0, 'auto']}
               />
               <Radar
                 name={segment.name}
@@ -227,7 +227,7 @@ export function MarketComparisonChart({
               <Tooltip 
                 formatter={(value, name, props) => {
                   if (showPercentages) {
-                    return [`${value.toFixed(1)}%`, name];
+                    return [`${value}%`, name];
                   }
                   
                   const metric = props.payload.metric;

@@ -3,6 +3,8 @@ import { MarketSegment } from '@/app/dashboard/detailed-analysis/market-analysis
 import { formatCurrency } from '@/utils/marketSegmentData';
 import React, { useState } from 'react';
 import { FiBarChart2, FiGrid, FiList, FiArrowUp, FiArrowDown, FiChevronRight } from 'react-icons/fi';
+import { SegmentCard } from './SegmentCard';
+import { SegmentListItem } from './SegmentListItem';
 
 
 interface MarketSegmentsGridProps {
@@ -21,7 +23,7 @@ export function MarketSegmentsGrid({
   
   // Déterminer le libellé du type de segment
   const getSegmentTypeLabel = () => {
-    const labels = {
+    const labels: Record<string, string> = {
       'universe': 'univers',
       'category': 'catégories',
       'sub_category': 'sous-catégories',

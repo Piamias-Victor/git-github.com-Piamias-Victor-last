@@ -187,6 +187,66 @@ export function TopLaboratoriesChart({ segments, isLoading = false }: TopLaborat
     );
   }
 
+  const CustomContent = (props: any) => {
+    const { x, y, width, height, name, value, index } = props;
+    const fill = COLORS[index % COLORS.length];
+    
+    if (width < 40 || height < 40) {
+      return (
+        <g>
+          <rect
+            x={x}
+            y={y}
+            width={width}
+            height={height}
+            style={{
+              fill,
+              stroke: '#fff',
+              strokeWidth: 2,
+              strokeOpacity: 1
+            }}
+          />
+        </g>
+      );
+    }
+    
+    return (
+      <g>
+        <rect
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          style={{
+            fill,
+            stroke: '#fff',
+            strokeWidth: 2,
+            strokeOpacity: 1
+          }}
+        />
+        <text
+          x={x + width / 2}
+          y={y + height / 2 - 7}
+          textAnchor="middle"
+          fill="#fff"
+          fontSize={12}
+          fontWeight="bold"
+        >
+          {name}
+        </text>
+        <text
+          x={x + width / 2}
+          y={y + height / 2 + 10}
+          textAnchor="middle"
+          fill="#fff"
+          fontSize={10}
+        >
+          {value.toFixed(1)}%
+        </text>
+      </g>
+    );
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
       <div className="flex justify-between items-center mb-4">
@@ -266,82 +326,24 @@ export function TopLaboratoriesChart({ segments, isLoading = false }: TopLaborat
               </PieChart>
             ) : (
               <Treemap
-                data={labData}
-                dataKey="revenue"
-                aspectRatio={4 / 3}
-                stroke="#fff"
-                content={(props: any) => {
-                  const { x, y, width, height, name, value, index } = props;
-                  const fill = COLORS[index % COLORS.length];
-                  
-                  if (width < 40 || height < 40) {
-                    return (
-                      <g>
-                        <rect
-                          x={x}
-                          y={y}
-                          width={width}
-                          height={height}
-                          style={{
-                            fill,
-                            stroke: '#fff',
-                            strokeWidth: 2,
-                            strokeOpacity: 1
-                          }}
-                        />
-                      </g>
-                    );
-                  }
-                  
-                  return (
-                    <g>
-                      <rect
-                        x={x}
-                        y={y}
-                        width={width}
-                        height={height}
-                        style={{
-                          fill,
-                          stroke: '#fff',
-                          strokeWidth: 2,
-                          strokeOpacity: 1
-                        }}
-                      />
-                      <text
-                        x={x + width / 2}
-                        y={y + height / 2 - 7}
-                        textAnchor="middle"
-                        fill="#fff"
-                        fontSize={12}
-                        fontWeight="bold"
-                      >
-                        {name}
-                      </text>
-                      <text
-                        x={x + width / 2}
-                        y={y + height / 2 + 10}
-                        textAnchor="middle"
-                        fill="#fff"
-                        fontSize={10}
-                      >
-                        {value.toFixed(1)}%
-                      </text>
-                    </g>
-                  );
-                }}
-              >
-                <Tooltip
-                  formatter={(value: any, name: string, props: any) => {
-                    const item = props.payload;
-                    return [formatCurrency(item.revenue), name];
-                  }}
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                    borderColor: '#E5E7EB',
-                    color: '#111827',
-                  }}
-                />
-              </Treemap>
+  data={labData}
+  dataKey="revenue"
+  aspectRatio={4 / 3}
+  stroke="#fff"
+  content={<CustomContent />}
+>
+  <Tooltip
+    formatter={(value: any, name: string, props: any) => {
+      const item = props.payload;
+      return [formatCurrency(item.revenue), name];
+    }}
+    contentStyle={{ 
+      backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+      borderColor: '#E5E7EB',
+      color: '#111827',
+    }}
+  />
+</Treemap>
             )}
           </ResponsiveContainer>
         </div>

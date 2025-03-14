@@ -27,19 +27,23 @@ export function MarketHierarchyVisualization({
   };
 
   // Déterminer le titre en fonction du type de segment
-  const getHierarchyTitle = () => {
-    const titles = {
-      'universe': 'Hiérarchie des univers',
-      'category': 'Hiérarchie des catégories',
-      'sub_category': 'Hiérarchie des sous-catégories',
-      'family': 'Hiérarchie des familles',
-      'sub_family': 'Hiérarchie des sous-familles',
-      'lab_distributor': 'Hiérarchie des distributeurs',
-      'brand_lab': 'Hiérarchie des laboratoires',
-      'range_name': 'Hiérarchie des gammes'
-    };
-    return titles[type] || 'Hiérarchie des segments';
+// Dans MarketHierarchyVisualization.tsx
+// Modifiez votre objet titles pour inclure la clé "specificity"
+
+const getHierarchyTitle = () => {
+  const titles = {
+    'universe': 'Hiérarchie des univers',
+    'category': 'Hiérarchie des catégories',
+    'sub_category': 'Hiérarchie des sous-catégories',
+    'family': 'Hiérarchie des familles',
+    'sub_family': 'Hiérarchie des sous-familles',
+    'specificity': 'Hiérarchie des spécificités', // Ajoutez cette ligne
+    'lab_distributor': 'Hiérarchie des distributeurs',
+    'brand_lab': 'Hiérarchie des laboratoires',
+    'range_name': 'Hiérarchie des gammes'
   };
+  return titles[type] || 'Hiérarchie des segments';
+};
 
   // Obtenir les groupes hiérarchiques organisés
   const hierarchy = organizeHierarchy(segments, type);
